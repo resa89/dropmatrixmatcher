@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1195</width>
+    <width>1196</width>
     <height>780</height>
    </rect>
   </property>
@@ -74,9 +74,44 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="findButton">
+       <widget class="QPushButton" name="findButton0">
         <property name="text">
-         <string>Match</string>
+         <string>SQDIFF</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="findButton1">
+        <property name="text">
+         <string>SQDIFF NORMED</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="findButton2">
+        <property name="text">
+         <string>TM CCORR</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="findButton3">
+        <property name="text">
+         <string>TM CCORR NORMED</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="findButton4">
+        <property name="text">
+         <string>TM COEFF</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="findButton5">
+        <property name="text">
+         <string>TM COEFF NORMED</string>
         </property>
        </widget>
       </item>
@@ -117,7 +152,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1195</width>
+     <width>1196</width>
      <height>22</height>
     </rect>
    </property>

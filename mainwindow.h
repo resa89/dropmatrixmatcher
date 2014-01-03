@@ -29,8 +29,15 @@ public:
 private slots:
     void on_loadPattern_clicked();
     void on_loadImage_clicked();
-    void on_findButton_clicked();
-    void enableFindButton();
+    void enableFindButtons();
+
+    void on_findButton0_clicked();
+    void on_findButton1_clicked();
+    void on_findButton2_clicked();
+    void on_findButton3_clicked();
+    void on_findButton4_clicked();
+    void on_findButton5_clicked();
+
 
 private:
     Ui::MainWindow *ui;
