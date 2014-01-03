@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 
 class QPixmap;
 class QLabel;
@@ -20,6 +24,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void displayImageInImageLabel(cv::Mat image);
 
 private slots:
     void on_loadPattern_clicked();
@@ -31,8 +36,8 @@ private:
     Ui::MainWindow *ui;
     QImage *pattern;
     QImage *image;
-    QString *patternPath;
-    QString *imagePath;
+    QString patternPath;
+    QString imagePath;
 };
 
 #endif // MAINWINDOW_H

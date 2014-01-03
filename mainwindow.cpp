@@ -5,6 +5,8 @@
 
 #include <QFileDialog>
 #include <QStringList>
+#include <QFile>
+#include <QDir>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include "opencv2/highgui/highgui.hpp"
@@ -16,7 +18,8 @@ using namespace std;
 using namespace cv;
 
 /// Global Variables
-Mat img; Mat templ; Mat result;
+Mat img; Mat templ; Mat result; Mat img_display;
+
 char* image_window = "Source Image";
 char* result_window = "Result window";
 
@@ -39,9 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->imageLabel->setPixmap(QPixmap::fromImage(*image));
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern));
-
-    imagePath = new QString;
-    patternPath = new QString;
 
     ui->findButton->setDefault(true);
     ui->findButton->setEnabled(false);
@@ -80,9 +80,9 @@ void MainWindow::on_loadPattern_clicked()
     pattern->load(fileName);
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));  //evtl weglassen, wenn standardmäßig image/pattern in label angezeigt wird
 
-    patternPath = &fileName;                          //ACHTUNG! Pointer auf Speicher
+    patternPath = fileName;                          //ACHTUNG! Pointer auf Speicher
 
-    /// Copy Teil von Image
+    /// Copy T-eil von Image
     //QImage image;
     //image.fromData(fileName);
     //QImage copy;
@@ -101,20 +101,14 @@ void MainWindow::on_loadImage_clicked()
 
     image->load(fileName);
     ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));      //s.oben
-    imagePath = &fileName;                                                    //ACHTUNG! Pointer auf Speicher
+    imagePath = fileName;                                                    //ACHTUNG! Pointer auf Speicher
 }
 
 void MainWindow::on_findButton_clicked()
 {
     /// Load image and template
-    QString imgPath = "/Users/resa/Studium/WiSe2013/Thesis/image_example.png";
-    QString patPath = "/Users/resa/Studium/WiSe2013/Thesis/muster_example.png";
-
-    //img = imread(imagePath->toStdString());                             //eig. this->imagePath verwenden (geht aber nicht, crashed)
-    //templ = imread(patternPath->toStdString());                             //eig. this->imagePath verwenden (geht aber nicht, crashed)
-
-    img = imread(imgPath.toStdString());
-    templ = imread(patPath.toStdString());
+    img = imread(this->imagePath.toStdString());
+    templ = imread(this->patternPath.toStdString());
 
     /// Create windows
     namedWindow( image_window, CV_WINDOW_AUTOSIZE );
@@ -124,7 +118,10 @@ void MainWindow::on_findButton_clicked()
     char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
     createTrackbar( trackbar_label, image_window, &match_method, max_Trackbar, MatchingMethod );
 
-    MatchingMethod( 0, 0 );
+    MatchingMethod( 0, 0);
+
+    this->displayImageInImageLabel(img_display);
+
 
     //QImage qImage_display = MatchingMethod( 0, 0 );
     //int w = qImage_display.width();
@@ -135,6 +132,17 @@ void MainWindow::on_findButton_clicked()
     waitKey(0);
 }
 
+void MainWindow::displayImageInImageLabel(Mat mat)
+{
+    QPixmap pixmap;
+    int w = ui->imageLabel->width();
+    int h = ui->imageLabel->height();
+
+    pixmap = QPixmap::fromImage(QImage((unsigned char*) mat.data, mat.cols, mat.rows, QImage::Format_RGB888));
+
+    ui->imageLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
+}
+
 /**
  * @function MatchingMethod
  * @brief Trackbar callback
@@ -142,7 +150,6 @@ void MainWindow::on_findButton_clicked()
 void MatchingMethod( int, void* )
 {
   /// Source image to display
-  Mat img_display;
   img.copyTo( img_display );
 
   /// Create the result matrix
@@ -169,13 +176,10 @@ void MatchingMethod( int, void* )
 
   /// Show me what you got
   rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
-  rectangle( result, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
+  rectangle( result, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(1), 2, 8, 0 );
 
   imshow( image_window, img_display );
   imshow( result_window, result );
-
-
-  //QImage qImage_display = QImage(img_display.data, img_display.cols, img_display.rows, img_display.step, format);             //Welches Format? QImage::Format
 
   return;
 }

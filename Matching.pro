@@ -21,11 +21,3 @@ HEADERS  += mainwindow.h
 LIBS += -lm -lopencv_core -lopencv_highgui -lopencv_video -lopencv_imgproc
 
 FORMS    += mainwindow.ui
-
-CONFIG( debug, debug|release ) {
-    # debug
-    QMAKE_LIBDIR += /usr/lib
-} else {
-    # release
-    QMAKE_LIBDIR += /usr/lib
-}
