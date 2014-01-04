@@ -7,7 +7,6 @@
 #include <QStringList>
 #include <QFile>
 #include <QDir>
-#include <QMessageBox>
 
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
@@ -118,8 +117,8 @@ void MainWindow::on_loadImage_clicked()
     int h = ui->imageLabel->height();
 
     image->load(fileName);
-    ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));      //s.oben
-    imagePath = fileName;                                                    //ACHTUNG! Pointer auf Speicher
+    ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
+    imagePath = fileName;
 }
 
 void MainWindow::displayImageInImageLabel(Mat mat)
@@ -133,316 +132,50 @@ void MainWindow::displayImageInImageLabel(Mat mat)
     ui->imageLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
 }
 
-/**
- * @function MatchingMethod
- * @brief Trackbar callback
- */
-/*
- *void MatchingMethod( int, void* )
-{
-
-  //imshow( image_window, img_display );
-  //imshow( result_window, result );
-
-  return;
-}
-*/
 
 void MainWindow::on_findButton0_clicked()
 {
-    /// Load image and template
-    img = imread(this->imagePath.toStdString());
-    templ = imread(this->patternPath.toStdString());
-
-    /// Create windows
-    namedWindow( image_window, CV_WINDOW_AUTOSIZE );
-    namedWindow( result_window, CV_WINDOW_AUTOSIZE );
-
-    /// Create Trackbar
-    //char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
-    //createTrackbar( trackbar_label, image_window, &match_method, max_Trackbar, MatchingMethod );
-
-    match_method = 0;
-
-    /// Source image to display
-    img.copyTo( img_display );
-
-    /// Create the result matrix
-    int result_cols =  img.cols - templ.cols + 1;
-    int result_rows = img.rows - templ.rows + 1;
-
-    result.create( result_cols, result_rows, CV_32FC1 );
-
-    /// Do the Matching and Normalize
-    matchTemplate( img, templ, result, match_method );
-    normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
-
-    int i = 0;
-    for( i; i<10; i++ ){
-
-        /// Localizing the best match with minMaxLoc
-        double minVal; double maxVal; Point minLoc; Point maxLoc;
-        Point matchLoc;
-
-        minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
-
-        /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED )
-          { matchLoc = minLoc; }
-        else
-          { matchLoc = maxLoc; }
-
-        /// Show me what you got
-        rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
-
-        result.at<int>(maxLoc.y, maxLoc.x)=0;
-        result.at<int>(maxLoc.y, maxLoc.x-1)=0;
-    }
-
-    this->displayImageInImageLabel(img_display);
-
-    waitKey(0);
-}
+    matchingWithMethod(0);}
 
 void MainWindow::on_findButton1_clicked()
 {
-    /// Load image and template
-    img = imread(this->imagePath.toStdString());
-    templ = imread(this->patternPath.toStdString());
-
-    /// Create windows
-    namedWindow( image_window, CV_WINDOW_AUTOSIZE );
-    namedWindow( result_window, CV_WINDOW_AUTOSIZE );
-
-    /// Create Trackbar
-    //char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
-    //createTrackbar( trackbar_label, image_window, &match_method, max_Trackbar, MatchingMethod );
-
-    match_method = 1;
-
-    /// Source image to display
-    img.copyTo( img_display );
-
-    /// Create the result matrix
-    int result_cols =  img.cols - templ.cols + 1;
-    int result_rows = img.rows - templ.rows + 1;
-
-    result.create( result_cols, result_rows, CV_32FC1 );
-
-    /// Do the Matching and Normalize
-    matchTemplate( img, templ, result, match_method );
-    normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
-
-    int i = 0;
-    for( i; i<10; i++ ){
-
-        /// Localizing the best match with minMaxLoc
-        double minVal; double maxVal; Point minLoc; Point maxLoc;
-        Point matchLoc;
-
-        minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
-
-        /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED )
-          { matchLoc = minLoc; }
-        else
-          { matchLoc = maxLoc; }
-
-        /// Show me what you got
-        rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
-
-        result.at<int>(maxLoc.y, maxLoc.x)=0;
-        result.at<int>(maxLoc.y, maxLoc.x-1)=0;
-    }
-
-    this->displayImageInImageLabel(img_display);
-
-    waitKey(0);
+    matchingWithMethod(1);
 }
 
 void MainWindow::on_findButton2_clicked()
 {
-    /// Load image and template
-    img = imread(this->imagePath.toStdString());
-    templ = imread(this->patternPath.toStdString());
-
-    /// Create windows
-    namedWindow( image_window, CV_WINDOW_AUTOSIZE );
-    namedWindow( result_window, CV_WINDOW_AUTOSIZE );
-
-    /// Create Trackbar
-    //char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
-    //createTrackbar( trackbar_label, image_window, &match_method, max_Trackbar, MatchingMethod );
-
-    match_method = 2;
-
-    /// Source image to display
-    img.copyTo( img_display );
-
-    /// Create the result matrix
-    int result_cols =  img.cols - templ.cols + 1;
-    int result_rows = img.rows - templ.rows + 1;
-
-    result.create( result_cols, result_rows, CV_32FC1 );
-
-    /// Do the Matching and Normalize
-    matchTemplate( img, templ, result, match_method );
-    normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
-
-    int i = 0;
-    for( i; i<10; i++ ){
-
-        /// Localizing the best match with minMaxLoc
-        double minVal; double maxVal; Point minLoc; Point maxLoc;
-        Point matchLoc;
-
-        minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
-
-        /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED )
-          { matchLoc = minLoc; }
-        else
-          { matchLoc = maxLoc; }
-
-        /// Show me what you got
-        rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
-
-        result.at<int>(maxLoc.y, maxLoc.x)=0;
-        result.at<int>(maxLoc.y, maxLoc.x-1)=0;
-    }
-
-    this->displayImageInImageLabel(img_display);
-
-    waitKey(0);
+    matchingWithMethod(2);
 }
 
 void MainWindow::on_findButton3_clicked()
 {
-    /// Load image and template
-    img = imread(this->imagePath.toStdString());
-    templ = imread(this->patternPath.toStdString());
-
-    /// Create windows
-    namedWindow( image_window, CV_WINDOW_AUTOSIZE );
-    namedWindow( result_window, CV_WINDOW_AUTOSIZE );
-
-    /// Create Trackbar
-    //char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
-    //createTrackbar( trackbar_label, image_window, &match_method, max_Trackbar, MatchingMethod );
-
-    match_method = 3;
-
-    /// Source image to display
-    img.copyTo( img_display );
-
-    /// Create the result matrix
-    int result_cols =  img.cols - templ.cols + 1;
-    int result_rows = img.rows - templ.rows + 1;
-
-    result.create( result_cols, result_rows, CV_32FC1 );
-
-    /// Do the Matching and Normalize
-    matchTemplate( img, templ, result, match_method );
-    normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
-
-    int i = 0;
-    for( i; i<10; i++ ){
-
-        /// Localizing the best match with minMaxLoc
-        double minVal; double maxVal; Point minLoc; Point maxLoc;
-        Point matchLoc;
-
-        minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
-
-        /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED )
-          { matchLoc = minLoc; }
-        else
-          { matchLoc = maxLoc; }
-
-        /// Show me what you got
-        rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
-
-        result.at<int>(maxLoc.y, maxLoc.x)=0;
-        result.at<int>(maxLoc.y, maxLoc.x-1)=0;
-    }
-
-    this->displayImageInImageLabel(img_display);
-
-    waitKey(0);
-}
+    matchingWithMethod(3);}
 
 void MainWindow::on_findButton4_clicked()
 {
-    /// Load image and template
-    img = imread(this->imagePath.toStdString());
-    templ = imread(this->patternPath.toStdString());
-
-    /// Create windows
-    namedWindow( image_window, CV_WINDOW_AUTOSIZE );
-    namedWindow( result_window, CV_WINDOW_AUTOSIZE );
-
-    /// Create Trackbar
-    //char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
-    //createTrackbar( trackbar_label, image_window, &match_method, max_Trackbar, MatchingMethod );
-
-    match_method = 4;
-
-    /// Source image to display
-    img.copyTo( img_display );
-
-    /// Create the result matrix
-    int result_cols =  img.cols - templ.cols + 1;
-    int result_rows = img.rows - templ.rows + 1;
-
-    result.create( result_cols, result_rows, CV_32FC1 );
-
-    /// Do the Matching and Normalize
-    matchTemplate( img, templ, result, match_method );
-    normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
-
-    int i = 0;
-    for( i; i<10; i++ ){
-
-        /// Localizing the best match with minMaxLoc
-        double minVal; double maxVal; Point minLoc; Point maxLoc;
-        Point matchLoc;
-
-        minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
-
-        /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED )
-          { matchLoc = minLoc; }
-        else
-          { matchLoc = maxLoc; }
-
-        /// Show me what you got
-        rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
-
-        result.at<int>(maxLoc.y, maxLoc.x)=0;
-        result.at<int>(maxLoc.y, maxLoc.x-1)=0;
-    }
-
-    this->displayImageInImageLabel(img_display);
-
-    waitKey(0);
+    matchingWithMethod(4);
 }
 
 void MainWindow::on_findButton5_clicked()
 {
+    matchingWithMethod(5);
+}
+
+void MainWindow::matchingWithMethod(int method){
+
+    match_method = method;
+
     /// Load image and template
     img = imread(this->imagePath.toStdString());
     templ = imread(this->patternPath.toStdString());
 
     /// Create windows
-    namedWindow( image_window, CV_WINDOW_AUTOSIZE );
+    //namedWindow( image_window, CV_WINDOW_AUTOSIZE );
     namedWindow( result_window, CV_WINDOW_AUTOSIZE );
 
     /// Create Trackbar
     //char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
     //createTrackbar( trackbar_label, image_window, &match_method, max_Trackbar, MatchingMethod );
-
-    match_method = 5;
 
     /// Source image to display
     img.copyTo( img_display );
@@ -458,7 +191,7 @@ void MainWindow::on_findButton5_clicked()
     normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
 
     int i = 0;
-    for( i; i<10; i++ ){
+    for( i; i<50; i++ ){
 
         /// Localizing the best match with minMaxLoc
         double minVal; double maxVal; Point minLoc; Point maxLoc;
@@ -475,11 +208,21 @@ void MainWindow::on_findButton5_clicked()
         /// Show me what you got
         rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
 
-        result.at<int>(maxLoc.y, maxLoc.x)=0;
-        result.at<int>(maxLoc.y, maxLoc.x-1)=0;
+        if(method<=1)
+        {
+            result.at<int>(minLoc.y, minLoc.x)=1;
+           // result.at<int>(minLoc.y, minLoc.x-1)=1;
+        }
+        else
+        {
+            result.at<int>(maxLoc.y, maxLoc.x)=0;
+            if(maxVal<=0.4)
+            {
+                i=50;
+            }
+        }
     }
     this->displayImageInImageLabel(img_display);
 
-    waitKey(0);
+    waitKey(0);                                 //nötig?
 }
-

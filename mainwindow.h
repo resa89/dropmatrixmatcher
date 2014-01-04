@@ -45,6 +45,8 @@ private:
     QImage *image;
     QString patternPath;
     QString imagePath;
+    void matchingWithMethod(int method);
+
 };
 
 #endif // MAINWINDOW_H
