@@ -14,9 +14,11 @@ TEMPLATE = app
 INCLUDEPATH = /usr/local/include
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    prolabel.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    prolabel.h
 
 LIBS += -lm -lopencv_core -lopencv_highgui -lopencv_video -lopencv_imgproc
 

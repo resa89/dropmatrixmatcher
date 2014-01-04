@@ -24,7 +24,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void displayImageInImageLabel(cv::Mat image);
 
 private slots:
     void on_loadPattern_clicked();
@@ -43,8 +42,12 @@ private:
     Ui::MainWindow *ui;
     QImage *pattern;
     QImage *image;
+    QImage *image_2;
     QString patternPath;
     QString imagePath;
+    QString imagePath_2;
+
+    void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method);
 
 };

@@ -36,12 +36,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     image = new QImage;
+    image_2 = new QImage;
     pattern = new QImage;
 
     ui->setupUi(this);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
     ui->imageLabel->setPixmap(QPixmap::fromImage(*image));
+    ui->imageLabel_2->setPixmap(QPixmap::fromImage(*image_2));
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern));
 
     ui->findButton0->setDefault(true);
@@ -62,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(enableFindButtons()));
     connect(ui->loadPattern, SIGNAL(clicked()),
             this, SLOT(enableFindButtons()));
+
 }
 
 
@@ -78,7 +81,6 @@ void MainWindow::enableFindButtons()
 
     }
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -109,27 +111,60 @@ void MainWindow::on_loadPattern_clicked()
 
 void MainWindow::on_loadImage_clicked()
 {
+    int tabnumber;
+    tabnumber = ui->tabWidget->currentIndex();
+
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
         tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp)"));
-    int w = ui->imageLabel->width();
-    int h = ui->imageLabel->height();
 
-    image->load(fileName);
-    ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
-    imagePath = fileName;
+    ///check active tab
+    if(tabnumber == 0 )
+    {
+        image->load(fileName);
+        imagePath = fileName;
+
+        int w = ui->imageLabel->width();
+        int h = ui->imageLabel->height();
+        ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
+    }
+    else
+    {
+        image_2->load(fileName);
+        imagePath_2 = fileName;
+        int w = ui->imageLabel_2->width();
+        int h = ui->imageLabel_2->height();
+        ui->imageLabel_2->setPixmap(QPixmap::fromImage(*image_2).scaled(w,h,Qt::KeepAspectRatio));
+    }
 }
 
 void MainWindow::displayImageInImageLabel(Mat mat)
 {
+    int tabnumber;
+    tabnumber = ui->tabWidget->currentIndex();
+
     QPixmap pixmap;
-    int w = ui->imageLabel->width();
-    int h = ui->imageLabel->height();
 
-    pixmap = QPixmap::fromImage(QImage((unsigned char*) mat.data, mat.cols, mat.rows, QImage::Format_RGB888));
+    ///check active tab
+    if(tabnumber == 0)
+    {
+        int w = ui->imageLabel->width();
+        int h = ui->imageLabel->height();
 
-    ui->imageLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
+        pixmap = QPixmap::fromImage(QImage((unsigned char*) mat.data, mat.cols, mat.rows, QImage::Format_RGB888));
+
+        ui->imageLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
+    }
+    else
+    {
+        int w = ui->imageLabel_2->width();
+        int h = ui->imageLabel_2->height();
+
+        pixmap = QPixmap::fromImage(QImage((unsigned char*) mat.data, mat.cols, mat.rows, QImage::Format_RGB888));
+
+        ui->imageLabel_2->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
+    }
 }
 
 
@@ -164,9 +199,19 @@ void MainWindow::on_findButton5_clicked()
 void MainWindow::matchingWithMethod(int method){
 
     match_method = method;
+    int tabnumber;
+    tabnumber = ui->tabWidget->currentIndex();
 
     /// Load image and template
-    img = imread(this->imagePath.toStdString());
+    if (tabnumber == 0)
+    {
+        img = imread(this->imagePath.toStdString());
+    }
+    else
+    {
+        img = imread(this->imagePath_2.toStdString());
+    }
+
     templ = imread(this->patternPath.toStdString());
 
     /// Create windows
@@ -211,7 +256,10 @@ void MainWindow::matchingWithMethod(int method){
         if(method<=1)
         {
             result.at<int>(minLoc.y, minLoc.x)=1;
-           // result.at<int>(minLoc.y, minLoc.x-1)=1;
+            if(minVal>=0.6)
+            {
+                i=50;
+            }
         }
         else
         {
