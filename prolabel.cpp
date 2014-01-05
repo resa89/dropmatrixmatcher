@@ -67,8 +67,19 @@ void ProLabel::saveSlot()
     this->pixmap()->copy(selectionRect).save(fileName);
 }
 
-QRect ProLabel::getSelectionRect()
+QRect ProLabel::getQImageRect(float widthFactor, float heightFactor)
 {
-    return selectionRect;
+    QRect qimageSizedRect;
+    int x = (float)selectionRect.x() * widthFactor;
+    int y = (float)selectionRect.y() * heightFactor;
+    int w = (float)selectionRect.width() * widthFactor;
+    int h = (float)selectionRect.height() * heightFactor;
+
+    qimageSizedRect.setX(x);
+    qimageSizedRect.setY(y);
+    qimageSizedRect.setWidth(w);
+    qimageSizedRect.setHeight(h);
+
+    return qimageSizedRect;
 }
 

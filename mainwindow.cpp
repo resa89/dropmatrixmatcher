@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(enableFindButtons()));
     connect(ui->loadPattern, SIGNAL(clicked()),
             this, SLOT(enableFindButtons()));
+    connect(ui->LoadSelectedPattern, SIGNAL(clicked()),
+            this, SLOT(enableFindButtons()));
 
 }
 
@@ -272,20 +274,29 @@ void MainWindow::matchingWithMethod(int method){
 
 void MainWindow::on_LoadSelectedPattern_clicked()
 {
-    QPixmap pixmap;
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
-    QString fileName = "/Users/resa/Studium/WiSe2013/Thesis/pattern01.png";
+    int imagewidth = this->image->width();
+    int imageheight = this->image->height();
+    int pixmapwidth = ui->imageLabel->pixmap()->width();
+    int pixmapheight = ui->imageLabel->pixmap()->height();
 
-    selectRect = ui->imageLabel->getSelectionRect();
+    float widthFactor = (float)imagewidth/(float)pixmapwidth;
+    float heightFactor = (float)imageheight/(float)pixmapheight;
 
-    pixmap = ui->imageLabel->pixmap()->copy(selectRect);
+    QString fileName = "/Users/resa/Studium/WiSe2013/Thesis/pattern01.png";         //Ort muss einstellbar sein
+
+    selectRect = ui->imageLabel->getQImageRect(widthFactor, heightFactor);
+
+    //pixmap = ui->imageLabel->pixmap()->copy(selectRect);
+
+    //selectRect
 
     *pattern = this->image->copy(selectRect);
 
     //*pattern = pixmap.toImage();
 
-    pattern->save(fileName);        //muss aufgehellt werden
+    pattern->save(fileName, 0, 100);        //muss aufgehellt werden
     patternPath = fileName;
 
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
