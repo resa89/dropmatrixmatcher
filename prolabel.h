@@ -11,6 +11,7 @@ class ProLabel : public QLabel
 public:
     ProLabel(QWidget *parent = 0);
     ~ProLabel();
+    QRect getSelectionRect();
 
 protected:
     void paintEvent(QPaintEvent *e);

@@ -11,6 +11,7 @@ class QPixmap;
 class QLabel;
 class QPushButton;
 class QLayout;
+class QRect;
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +38,7 @@ private slots:
     void on_findButton4_clicked();
     void on_findButton5_clicked();
 
+    void on_LoadSelectedPattern_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -46,6 +48,7 @@ private:
     QString patternPath;
     QString imagePath;
     QString imagePath_2;
+    QRect selectRect;
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method);

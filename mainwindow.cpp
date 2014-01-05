@@ -8,10 +8,10 @@
 #include <QFile>
 #include <QDir>
 
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
+//#include <opencv/cv.h>
+//#include <opencv/highgui.h>
+//#include "opencv2/highgui/highgui.hpp"
+//#include "opencv2/imgproc/imgproc.hpp"
 #include <iostream>
 #include <stdio.h>
 
@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     image = new QImage;
     image_2 = new QImage;
     pattern = new QImage;
+    //matchedImage = new Mat;
 
     ui->setupUi(this);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
@@ -100,13 +101,6 @@ void MainWindow::on_loadPattern_clicked()
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));  //evtl weglassen, wenn standardmäßig image/pattern in label angezeigt wird
 
     patternPath = fileName;                          //ACHTUNG! Pointer auf Speicher
-
-    /// Copy T-eil von Image
-    //QImage image;
-    //image.fromData(fileName);
-    //QImage copy;
-    //copy = image.copy( 0, 0, 128, 128);
-    //copy.save("cropped_image.jpg");}
 }
 
 void MainWindow::on_loadImage_clicked()
@@ -270,7 +264,30 @@ void MainWindow::matchingWithMethod(int method){
             }
         }
     }
+    //matchedImage = img_display;
     this->displayImageInImageLabel(img_display);
 
     waitKey(0);                                 //nötig?
+}
+
+void MainWindow::on_LoadSelectedPattern_clicked()
+{
+    QPixmap pixmap;
+    int w = ui->patternLabel->width();
+    int h = ui->patternLabel->height();
+    QString fileName = "/Users/resa/Studium/WiSe2013/Thesis/pattern01.png";
+
+    selectRect = ui->imageLabel->getSelectionRect();
+
+    pixmap = ui->imageLabel->pixmap()->copy(selectRect);
+
+    *pattern = this->image->copy(selectRect);
+
+    //*pattern = pixmap.toImage();
+
+    pattern->save(fileName);        //muss aufgehellt werden
+    patternPath = fileName;
+
+    ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
+
 }

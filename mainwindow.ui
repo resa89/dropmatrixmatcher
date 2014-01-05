@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1196</width>
+    <width>1202</width>
     <height>600</height>
    </rect>
   </property>
@@ -48,6 +48,13 @@
          <widget class="QPushButton" name="loadPattern">
           <property name="text">
            <string>Load Pattern</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="LoadSelectedPattern">
+          <property name="text">
+           <string>Selected Pattern</string>
           </property>
          </widget>
         </item>
@@ -215,7 +222,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1196</width>
+     <width>1202</width>
      <height>22</height>
     </rect>
    </property>

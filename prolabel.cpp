@@ -66,3 +66,9 @@ void ProLabel::saveSlot()
                                                     QObject::tr("Images (*.jpg)"));
     this->pixmap()->copy(selectionRect).save(fileName);
 }
+
+QRect ProLabel::getSelectionRect()
+{
+    return selectionRect;
+}
+
