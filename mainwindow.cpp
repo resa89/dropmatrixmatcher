@@ -60,6 +60,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->findButton5->setDefault(true);
     ui->findButton5->setEnabled(false);
 
+    ui->brightnessSlider->setTickInterval(100);
+    ui->contrastSlider->setTickInterval(3);
+
     // Only if images are uploaded, find button is enabled
     connect(ui->loadImage, SIGNAL(clicked()),
             this, SLOT(enableFindButtons()));
@@ -68,6 +71,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->LoadSelectedPattern, SIGNAL(clicked()),
             this, SLOT(enableFindButtons()));
 
+    connect(ui->brightnessSlider, SIGNAL(valueChanged(int)),
+    this, SLOT(setBrightness(int)));
+    connect(ui->contrastSlider, SIGNAL(valueChanged(int)),
+    this, SLOT(setContrast(int)));
 }
 
 
@@ -95,7 +102,7 @@ void MainWindow::on_loadPattern_clicked()
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp)"));
+        tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
 
@@ -113,7 +120,7 @@ void MainWindow::on_loadImage_clicked()
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp)"));
+        tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp *tif)"));
 
     ///check active tab
     if(tabnumber == 0 )
@@ -284,17 +291,11 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     float widthFactor = (float)imagewidth/(float)pixmapwidth;
     float heightFactor = (float)imageheight/(float)pixmapheight;
 
-    QString fileName = "/Users/resa/Studium/WiSe2013/Thesis/pattern01.png";         //Ort muss einstellbar sein
+    QString fileName = "/Users/resa/Studium/WiSe2013/Thesis/pattern01.png";         //Ort muss einstellbar sein, evt. globale Variable
 
     selectRect = ui->imageLabel->getQImageRect(widthFactor, heightFactor);
 
-    //pixmap = ui->imageLabel->pixmap()->copy(selectRect);
-
-    //selectRect
-
     *pattern = this->image->copy(selectRect);
-
-    //*pattern = pixmap.toImage();
 
     pattern->save(fileName, 0, 100);        //muss aufgehellt werden
     patternPath = fileName;
@@ -302,3 +303,53 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
 
 }
+
+void MainWindow::setBrightness(int value)
+{
+    int w = ui->patternLabel->width();
+    int h = ui->patternLabel->height();
+    /// Read pattern
+    Mat matImage = imread(this->patternPath.toStdString());
+    Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
+
+    /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
+    for( int y = 0; y < matImage.rows; y++ )
+    {
+        for( int x = 0; x < matImage.cols; x++ )
+        {
+            for( int c = 0; c < 3; c++ )
+            {
+                new_image.at<Vec3b>(y,x)[c] = saturate_cast<uchar>( matImage.at<Vec3b>(y,x)[c] + value );
+            }
+        }
+    }
+
+    *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, QImage::Format_RGB888);
+    ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
+
+}
+
+void MainWindow::setContrast(int value)
+{
+    int w = ui->patternLabel->width();
+    int h = ui->patternLabel->height();
+    /// Read pattern
+    Mat matImage = imread(this->patternPath.toStdString());
+    Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
+
+    /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
+    for( int y = 0; y < matImage.rows; y++ )
+    {
+        for( int x = 0; x < matImage.cols; x++ )
+        {
+            for( int c = 0; c < 3; c++ )
+            {
+                new_image.at<Vec3b>(y,x)[c] = saturate_cast<uchar>( (float)1/value*( matImage.at<Vec3b>(y,x)[c] ) );
+            }
+        }
+    }
+
+    *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, QImage::Format_RGB888);
+    ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
+}
+

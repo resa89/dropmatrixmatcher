@@ -30,6 +30,8 @@ private slots:
     void on_loadPattern_clicked();
     void on_loadImage_clicked();
     void enableFindButtons();
+    void setBrightness(int value);
+    void setContrast(int value);
 
     void on_findButton0_clicked();
     void on_findButton1_clicked();
