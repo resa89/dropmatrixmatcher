@@ -29,7 +29,7 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>400</x>
       <y>10</y>
       <width>900</width>
       <height>600</height>
@@ -128,7 +128,7 @@
      <rect>
       <x>10</x>
       <y>13</y>
-      <width>311</width>
+      <width>386</width>
       <height>591</height>
      </rect>
     </property>
@@ -218,6 +218,9 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QDial" name="dial"/>
      </item>
      <item>
       <spacer name="verticalSpacer">

@@ -32,6 +32,7 @@ private slots:
     void enableFindButtons();
     void setBrightness(int value);
     void setContrast(int value);
+    void sensivity(int value);
 
     void on_findButton0_clicked();
     void on_findButton1_clicked();
