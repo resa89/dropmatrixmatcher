@@ -48,6 +48,8 @@ private:
     QImage *pattern;
     QImage *image;
     QImage *image_2;
+    cv::Mat *greyImage;
+    cv::Mat *greyToScreen;
     QString patternPath;
     QString imagePath;
     QString imagePath_2;
@@ -55,6 +57,7 @@ private:
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method);
+    void createGreyImage(cv::Mat colorImage);
 
 };
 

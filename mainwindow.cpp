@@ -7,11 +7,6 @@
 #include <QStringList>
 #include <QFile>
 #include <QDir>
-
-//#include <opencv/cv.h>
-//#include <opencv/highgui.h>
-//#include "opencv2/highgui/highgui.hpp"
-//#include "opencv2/imgproc/imgproc.hpp"
 #include <iostream>
 #include <stdio.h>
 
@@ -20,6 +15,7 @@ using namespace cv;
 
 /// Global Variables
 Mat img; Mat templ; Mat result; Mat img_display;
+//Mat greyToScreen;f
 
 char* image_window = "Source Image";
 char* result_window = "Result window";
@@ -29,7 +25,7 @@ int max_Trackbar = 5;
 float sensivityRange;
 
 /// Function Headers
-void MatchingMethod( int, void* );
+//void MatchingMethod( int, void* );
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -38,8 +34,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     image = new QImage;
     image_2 = new QImage;
+    greyImage = new Mat;
     pattern = new QImage;
-    //matchedImage = new Mat;
+    greyToScreen = new Mat;
 
     ui->setupUi(this);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
@@ -134,12 +131,23 @@ void MainWindow::on_loadImage_clicked()
     ///check active tab
     if(tabnumber == 0 )
     {
+        Mat matImage;
         image->load(fileName);
         //*image = image->convertToFormat(QImage::Format_RGB888);
-
         imagePath = fileName;
+
+        matImage = imread(this->imagePath.toStdString());
+        createGreyImage(matImage);
+
         int w = ui->imageLabel->width();
         int h = ui->imageLabel->height();
+
+        //greyToScreen(greyImage->cols,greyImage->rows,greyImage->type());
+       // cv::cvtColor(*greyImage, greyToScreen,CV_BGR2RGB);
+
+        QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+        ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
+
         ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
     }
     else
@@ -382,4 +390,24 @@ void MainWindow::setContrast(int value)
 void MainWindow::sensivity(int value)
 {
     sensivityRange = (float)value/100;
+}
+
+
+void MainWindow::createGreyImage(Mat colorImage){
+    int w = colorImage.cols;
+    int h = colorImage.rows;
+
+    greyImage->create(h, w, CV_32FC1);
+    greyToScreen->create(h, w, CV_32FC3);
+
+    for( int y=0; y<h; y++ )
+    {
+        for( int x=0; x<w; x++ )
+        {
+            greyImage->at<float>(y,x) = 0.299*colorImage.at<Vec3b>(y,x)[0]+0.587*colorImage.at<Vec3b>(y,x)[1]+0.114*colorImage.at<Vec3b>(y,x)[2];
+            greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);
+            greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);
+            greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);
+        }
+    }
 }
