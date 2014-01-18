@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     image_2 = new QImage;
     greyImage = new Mat;
     pattern = new QImage;
+    greyPattern = new Mat;
     greyToScreen = new Mat;
 
     ui->setupUi(this);
@@ -107,15 +108,24 @@ void MainWindow::on_loadPattern_clicked()
 {
     QString fileName;
     QFileDialog dialog;
+    Mat matPattern;
+
     fileName = dialog.getOpenFileName(this,
         tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
 
     pattern->load(fileName);
+    patternPath = fileName;                          //ACHTUNG! Pointer auf Speicher
+
+    matPattern = imread(this->patternPath.toStdString());
+    createGreyPattern(matPattern);
+    /* <-- nur für Testing*/
+    QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+    ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
+    /*--> nur für Testing */
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));  //evtl weglassen, wenn standardmäßig image/pattern in label angezeigt wird
 
-    patternPath = fileName;                          //ACHTUNG! Pointer auf Speicher
 }
 
 void MainWindow::on_loadImage_clicked()
@@ -126,7 +136,7 @@ void MainWindow::on_loadImage_clicked()
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp *tif)"));
+        tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
 
     ///check active tab
     if(tabnumber == 0 )
@@ -245,14 +255,6 @@ void MainWindow::matchingWithMethod(int method){
 
     templ = imread(this->patternPath.toStdString());
 
-    /// Create windows
-    //namedWindow( image_window, CV_WINDOW_AUTOSIZE );
-    //namedWindow( result_window, CV_WINDOW_AUTOSIZE );
-
-    /// Create Trackbar
-    //char* trackbar_label = "Method: \n 0: SQDIFF \n 1: SQDIFF NORMED \n 2: TM CCORR \n 3: TM CCORR NORMED \n 4: TM COEFF \n 5: TM COEFF NORMED";
-    //createTrackbar( trackbar_label, image_window, &match_method, max_Trackbar, MatchingMethod );
-
     /// Source image to display
     img.copyTo( img_display );
 
@@ -263,7 +265,8 @@ void MainWindow::matchingWithMethod(int method){
     result.create( result_cols, result_rows, CV_32FC1 );
 
     /// Do the Matching and Normalize
-    matchTemplate( img, templ, result, match_method );
+    //matchTemplate( img, templ, result, match_method );
+    result = match();
     normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
 
     int i = 0;
@@ -329,6 +332,13 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     pattern->save(fileName, 0, 100);        //muss aufgehellt werden
     patternPath = fileName;
 
+    Mat matPattern = imread(this->patternPath.toStdString());
+    createGreyPattern(matPattern);
+    /* <-- nur für Testing*/
+    QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+    ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
+    /*--> nur für Testing */
+
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
 
 }
@@ -393,7 +403,8 @@ void MainWindow::sensivity(int value)
 }
 
 
-void MainWindow::createGreyImage(Mat colorImage){
+void MainWindow::createGreyImage(Mat colorImage)
+{
     int w = colorImage.cols;
     int h = colorImage.rows;
 
@@ -405,9 +416,54 @@ void MainWindow::createGreyImage(Mat colorImage){
         for( int x=0; x<w; x++ )
         {
             greyImage->at<float>(y,x) = 0.299*colorImage.at<Vec3b>(y,x)[0]+0.587*colorImage.at<Vec3b>(y,x)[1]+0.114*colorImage.at<Vec3b>(y,x)[2];
-            greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);
-            greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);
-            greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);
+            greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
+            greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
+            greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
         }
     }
+}
+
+void MainWindow::createGreyPattern(Mat colorPattern)
+{
+    int w = colorPattern.cols;
+    int h = colorPattern.rows;
+
+    greyPattern->create(h, w, CV_32FC1);
+    greyToScreen->create(h, w, CV_32FC3);
+
+    for( int y=0; y<h; y++ )
+    {
+        for( int x=0; x<w; x++ )
+        {
+            greyPattern->at<float>(y,x) = 0.299*colorPattern.at<Vec3b>(y,x)[0]+0.587*colorPattern.at<Vec3b>(y,x)[1]+0.114*colorPattern.at<Vec3b>(y,x)[2];
+            greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyPattern->at<float>(y,x);             //greyToScreen only for Testing
+            greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyPattern->at<float>(y,x);             //
+            greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyPattern->at<float>(y,x);             //
+        }
+    }
+}
+
+Mat MainWindow::match()
+{
+    int result_cols =  greyImage->cols - greyImage->cols + 1;
+    int result_rows = greyImage->rows - greyImage->rows + 1;
+
+    Mat result;
+
+    result.create( result_cols, result_rows, CV_32FC1 );
+
+    for( int y=0; y<result.rows; y++ )
+    {
+        for( int x=0; x<result.cols; x++ )
+        {
+            result.at<float>(y,x) = matchingAlgorithm(x,y);
+        }
+    }
+    this->greyImage;
+
+}
+
+float MainWindow::matchingAlgorithm(int x, int y)
+{
+    greyImage->at<float>(y,x);
 }

@@ -46,6 +46,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QImage *pattern;
+    cv::Mat *greyPattern;
     QImage *image;
     QImage *image_2;
     cv::Mat *greyImage;
@@ -58,6 +59,9 @@ private:
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method);
     void createGreyImage(cv::Mat colorImage);
+    void createGreyPattern(cv::Mat colorPattern);
+    cv::Mat match();
+    float matchingAlgorithm(int x, int y);
 
 };
 
