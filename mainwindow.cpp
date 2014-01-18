@@ -9,13 +9,13 @@
 #include <QDir>
 #include <iostream>
 #include <stdio.h>
+//#include <math.h>
 
 using namespace std;
 using namespace cv;
 
 /// Global Variables
 Mat img; Mat templ; Mat result; Mat img_display;
-//Mat greyToScreen;f
 
 char* image_window = "Source Image";
 char* result_window = "Result window";
@@ -269,14 +269,14 @@ void MainWindow::matchingWithMethod(int method){
     result = match();
     normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
 
-    int i = 0;
-    for( i; i<50; i++ ){
+    for( int i=0; i<50; i++ ){
 
         /// Localizing the best match with minMaxLoc
         double minVal; double maxVal; Point minLoc; Point maxLoc;
         Point matchLoc;
 
-        minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
+        //minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
+        minMax(result, &minLoc, &maxLoc, &minVal, &maxVal);
 
         /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
         if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED )
@@ -289,15 +289,17 @@ void MainWindow::matchingWithMethod(int method){
 
         if(method<=1)
         {
-            result.at<int>(minLoc.y, minLoc.x)=1;
-            if(minVal>=1-sensivityRange)
+            float test = result.at<float>(minLoc.y, minLoc.x);
+             result.at<float>(minLoc.y, minLoc.x)=1;
+            test = result.at<float>(minLoc.y, minLoc.x);
+           if(minVal>=1-sensivityRange)
             {
                 i=50;
             }
         }
         else
         {
-            result.at<int>(maxLoc.y, maxLoc.x)=0;
+            result.at<float>(maxLoc.y, maxLoc.x)=0;
             if(maxVal<=sensivityRange)
             {
                 i=50;
@@ -427,6 +429,7 @@ void MainWindow::createGreyPattern(Mat colorPattern)
 {
     int w = colorPattern.cols;
     int h = colorPattern.rows;
+    greyPatternPixelSum = 0;
 
     greyPattern->create(h, w, CV_32FC1);
     greyToScreen->create(h, w, CV_32FC3);
@@ -436,6 +439,7 @@ void MainWindow::createGreyPattern(Mat colorPattern)
         for( int x=0; x<w; x++ )
         {
             greyPattern->at<float>(y,x) = 0.299*colorPattern.at<Vec3b>(y,x)[0]+0.587*colorPattern.at<Vec3b>(y,x)[1]+0.114*colorPattern.at<Vec3b>(y,x)[2];
+            greyPatternPixelSum += greyPattern->at<float>(y,x);
             greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyPattern->at<float>(y,x);             //greyToScreen only for Testing
             greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyPattern->at<float>(y,x);             //
             greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyPattern->at<float>(y,x);             //
@@ -445,25 +449,81 @@ void MainWindow::createGreyPattern(Mat colorPattern)
 
 Mat MainWindow::match()
 {
-    int result_cols =  greyImage->cols - greyImage->cols + 1;
-    int result_rows = greyImage->rows - greyImage->rows + 1;
+    int result_cols =  greyImage->cols - greyPattern->cols + 1;
+    int result_rows = greyImage->rows - greyPattern->rows + 1;
 
-    Mat result;
+    Mat localResult;
 
-    result.create( result_cols, result_rows, CV_32FC1 );
+    localResult.create( result_cols, result_rows, CV_32FC1 );
 
-    for( int y=0; y<result.rows; y++ )
+    for( int y=0; y<localResult.rows; y++ )
     {
-        for( int x=0; x<result.cols; x++ )
+        for( int x=0; x<localResult.cols; x++ )
         {
-            result.at<float>(y,x) = matchingAlgorithm(x,y);
+            localResult.at<float>(y,x) = matchingAlgorithm(x,y);
         }
     }
-    this->greyImage;
-
+    return localResult;
 }
 
 float MainWindow::matchingAlgorithm(int x, int y)
 {
-    greyImage->at<float>(y,x);
+    float pixelResult = 0;
+    double greyImagePixelSum = 0;
+    for( int y2=0; y2<greyPattern->rows; y2++ )
+    {
+        for( int x2=0; x2<greyPattern->cols; x2++ )
+        {
+            greyImagePixelSum += greyImage->at<float>(y+y2,x+x2);
+
+        }
+    }
+    for( int y2=0; y2<greyPattern->rows; y2++ )
+    {
+        for( int x2=0; x2<greyPattern->cols; x2++ )
+        {
+            pixelResult += pow( tmpFunction(x2,y2) - imgFunction(x+x2,y+y2, greyImagePixelSum), (float)(2.0) );
+        }
+    }
+    return pixelResult;
+}
+
+float MainWindow::tmpFunction( int x, int y )
+{
+    float result;
+    result = greyPattern->at<float>(y,x) - greyPatternPixelSum/(greyPattern->cols * greyPattern->rows);
+    return result;
+}
+
+float MainWindow::imgFunction( int x, int y, double greyImagePixelSum )
+{
+
+    float result;
+    result = greyImage->at<float>(y,x) - greyImagePixelSum/(greyPattern->cols * greyPattern->rows);
+    return result;
+}
+
+void MainWindow::minMax(Mat matResult, Point* min, Point* max, double* minVal, double* maxVal)
+{
+    *minVal = matResult.at<float>(0,0);
+    *maxVal = matResult.at<float>(0,0);
+
+    for( int y=0; y<matResult.rows; y++ )
+    {
+        for( int x=0; x<matResult.cols; x++ )
+        {
+            if( matResult.at<float>(y,x) < (float)(*minVal) )
+            {
+                *minVal = matResult.at<float>(y,x);
+                min->x = x;
+                min->y = y;
+            }
+            if( matResult.at<float>(y,x) > (float)(*maxVal) )
+            {
+                *maxVal = matResult.at<float>(y,x);
+                max->x = x;
+                max->y = y;
+            }
+        }
+    }
 }

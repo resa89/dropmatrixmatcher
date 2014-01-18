@@ -55,13 +55,17 @@ private:
     QString imagePath;
     QString imagePath_2;
     QRect selectRect;
+    double greyPatternPixelSum;
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method);
     void createGreyImage(cv::Mat colorImage);
     void createGreyPattern(cv::Mat colorPattern);
     cv::Mat match();
-    float matchingAlgorithm(int x, int y);
+    float matchingAlgorithm( int x, int y );
+    float tmpFunction( int x, int y );
+    float imgFunction( int x, int y, double greyImagePixelSum );
+    void minMax(cv::Mat matResult, cv::Point* min, cv::Point* max, double* minVal, double* maxVal);
 
 };
 
