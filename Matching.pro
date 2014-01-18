@@ -15,7 +15,8 @@ INCLUDEPATH = /usr/local/include
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    prolabel.cpp
+    prolabel.cpp \
+    matching.cpp
 
 HEADERS  += mainwindow.h \
     prolabel.h

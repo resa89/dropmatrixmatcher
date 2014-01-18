@@ -58,7 +58,7 @@ private:
     double greyPatternPixelSum;
 
     void displayImageInImageLabel(cv::Mat image);
-    void matchingWithMethod(int method);
+    void matchingWithMethod(int method, float sensivity);
     void createGreyImage(cv::Mat colorImage);
     void createGreyPattern(cv::Mat colorPattern);
     cv::Mat match();
