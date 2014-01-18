@@ -70,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->dial, SIGNAL(valueChanged(int)),
             this, SLOT(sensivity(int)));
+    connect(ui->dial, SIGNAL(valueChanged(int)),
+            this, SLOT(setSensivityText(int)));
 }
 
 
@@ -199,7 +201,8 @@ void MainWindow::displayImageInImageLabel(Mat mat)
 
 void MainWindow::on_findButton0_clicked()
 {
-    matchingWithMethod(0, sensivityRange);}
+    matchingWithMethod(0, sensivityRange);
+}
 
 void MainWindow::on_findButton1_clicked()
 {
@@ -213,7 +216,8 @@ void MainWindow::on_findButton2_clicked()
 
 void MainWindow::on_findButton3_clicked()
 {
-    matchingWithMethod(3, sensivityRange);}
+    matchingWithMethod(3, sensivityRange);
+}
 
 void MainWindow::on_findButton4_clicked()
 {
@@ -223,6 +227,16 @@ void MainWindow::on_findButton4_clicked()
 void MainWindow::on_findButton5_clicked()
 {
     matchingWithMethod(5, sensivityRange);
+}
+
+void MainWindow::on_findButton6_clicked()
+{
+    matchingWithMethod(6, sensivityRange);
+}
+
+void MainWindow::on_findButton7_clicked()
+{
+    matchingWithMethod(7, sensivityRange);
 }
 
 
@@ -357,4 +371,10 @@ void MainWindow::createGreyPattern(Mat colorPattern)
             greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyPattern->at<float>(y,x);             //
         }
     }
+}
+
+void MainWindow::setSensivityText(int value)
+{
+    QString valueString = QString::number((float)value/100);         //
+    this->ui->sensivityValueText->insertPlainText(valueString);      //doesnt work
 }

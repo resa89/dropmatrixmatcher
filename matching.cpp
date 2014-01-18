@@ -55,8 +55,15 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
     result.create( result_cols, result_rows, CV_32FC1 );
 
     /// Do the Matching and Normalize
-    //matchTemplate( img, templ, result, match_method );
-    result = match();
+    if (match_method < 6)
+    {
+        matchTemplate( img, templ, result, match_method );
+    }
+    else
+    {
+        result = match();
+    }
+
     normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
 
     for( int i=0; i<50; i++ ){
@@ -64,12 +71,16 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
         /// Localizing the best match with minMaxLoc
         double minVal; double maxVal; Point minLoc; Point maxLoc;
         Point matchLoc;
-
-        //minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
-        minMax(result, &minLoc, &maxLoc, &minVal, &maxVal);
-
+        if (match_method < 6)
+        {
+            minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
+        }
+        else
+        {
+            minMax(result, &minLoc, &maxLoc, &minVal, &maxVal);
+        }
         /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED )
+        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED || match_method >= 6 )
           { matchLoc = minLoc; }
         else
           { matchLoc = maxLoc; }
@@ -77,7 +88,7 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
         /// Show me what you got
         rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
 
-        if(method<=1)
+        if(method<=1 || method >=6 )
         {
             float test = result.at<float>(minLoc.y, minLoc.x);
              result.at<float>(minLoc.y, minLoc.x)=1;
@@ -96,11 +107,7 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
             }
         }
     }
-
-    //matchedImage = img_display;
     this->displayImageInImageLabel(img_display);
-
-    //waitKey(0);                                 //nötig?
 }
 
 Mat MainWindow::match()

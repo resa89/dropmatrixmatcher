@@ -40,6 +40,8 @@ private slots:
     void on_findButton3_clicked();
     void on_findButton4_clicked();
     void on_findButton5_clicked();
+    void on_findButton6_clicked();
+    void on_findButton7_clicked();
 
     void on_LoadSelectedPattern_clicked();
 
@@ -61,6 +63,7 @@ private:
     void matchingWithMethod(int method, float sensivity);
     void createGreyImage(cv::Mat colorImage);
     void createGreyPattern(cv::Mat colorPattern);
+    void setSensivityText(int value);
     cv::Mat match();
     float matchingAlgorithm( int x, int y );
     float tmpFunction( int x, int y );
