@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->dial, SIGNAL(valueChanged(int)),
             this, SLOT(sensivity(int)));
     connect(ui->dial, SIGNAL(valueChanged(int)),
-            this, SLOT(setSensivityText(int)));
+            ui->sensivityValueText, SLOT(setNum(int)));
 }
 
 
@@ -239,6 +239,10 @@ void MainWindow::on_findButton7_clicked()
     matchingWithMethod(7, sensivityRange);
 }
 
+void MainWindow::on_findButton8_clicked()
+{
+    matchingWithMethod(8, sensivityRange);
+}
 
 void MainWindow::on_LoadSelectedPattern_clicked()
 {
@@ -356,6 +360,7 @@ void MainWindow::createGreyPattern(Mat colorPattern)
     int w = colorPattern.cols;
     int h = colorPattern.rows;
     greyPatternPixelSum = 0;
+    greyPatternPixelSumPow = 0;
 
     greyPattern->create(h, w, CV_32FC1);
     greyToScreen->create(h, w, CV_32FC3);
@@ -365,7 +370,9 @@ void MainWindow::createGreyPattern(Mat colorPattern)
         for( int x=0; x<w; x++ )
         {
             greyPattern->at<float>(y,x) = 0.299*colorPattern.at<Vec3b>(y,x)[0]+0.587*colorPattern.at<Vec3b>(y,x)[1]+0.114*colorPattern.at<Vec3b>(y,x)[2];
-            greyPatternPixelSum += greyPattern->at<float>(y,x);
+            double summand = greyPattern->at<float>(y,x);
+            greyPatternPixelSum += summand;
+            greyPatternPixelSumPow += pow(summand, 2);
             greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyPattern->at<float>(y,x);             //greyToScreen only for Testing
             greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyPattern->at<float>(y,x);             //
             greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyPattern->at<float>(y,x);             //
@@ -373,8 +380,3 @@ void MainWindow::createGreyPattern(Mat colorPattern)
     }
 }
 
-void MainWindow::setSensivityText(int value)
-{
-    QString valueString = QString::number((float)value/100);         //
-    this->ui->sensivityValueText->insertPlainText(valueString);      //doesnt work
-}

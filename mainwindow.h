@@ -42,6 +42,7 @@ private slots:
     void on_findButton5_clicked();
     void on_findButton6_clicked();
     void on_findButton7_clicked();
+    void on_findButton8_clicked();
 
     void on_LoadSelectedPattern_clicked();
 
@@ -58,16 +59,16 @@ private:
     QString imagePath_2;
     QRect selectRect;
     double greyPatternPixelSum;
+    double greyPatternPixelSumPow;
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method, float sensivity);
     void createGreyImage(cv::Mat colorImage);
     void createGreyPattern(cv::Mat colorPattern);
-    void setSensivityText(int value);
-    cv::Mat match();
-    float matchingAlgorithm( int x, int y );
-    float tmpFunction( int x, int y );
-    float imgFunction( int x, int y, double greyImagePixelSum );
+    cv::Mat match(int method);
+    float matchingAlgorithm( int x, int y, int method );
+    float tmpFunction( int x, int y, int method );
+    float imgFunction( int x, int y, double greyImagePixelSum, int method );
     void minMax(cv::Mat matResult, cv::Point* min, cv::Point* max, double* minVal, double* maxVal);
 
 };

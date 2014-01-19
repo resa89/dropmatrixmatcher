@@ -24,8 +24,6 @@ int max_Trackbar = 5;
 /// Function Headers
 //void MatchingMethod( int, void* );
 
-
-
 void MainWindow::matchingWithMethod(int method, float sensivity)
 {
 
@@ -61,7 +59,7 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
     }
     else
     {
-        result = match();
+        result = match(method);
     }
 
     normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
@@ -110,7 +108,7 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
     this->displayImageInImageLabel(img_display);
 }
 
-Mat MainWindow::match()
+Mat MainWindow::match(int method)
 {
     int result_cols =  greyImage->cols - greyPattern->cols + 1;
     int result_rows = greyImage->rows - greyPattern->rows + 1;
@@ -123,46 +121,62 @@ Mat MainWindow::match()
     {
         for( int x=0; x<localResult.cols; x++ )
         {
-            localResult.at<float>(y,x) = matchingAlgorithm(x,y);
+            localResult.at<float>(y,x) = matchingAlgorithm(x,y, method) ;
         }
     }
     return localResult;
 }
 
-float MainWindow::matchingAlgorithm(int x, int y)
+float MainWindow::matchingAlgorithm(int x, int y, int method)
 {
     float pixelResult = 0;
     double greyImagePixelSum = 0;
+    double greyImagePixelSumPow = 0;
     for( int y2=0; y2<greyPattern->rows; y2++ )
     {
         for( int x2=0; x2<greyPattern->cols; x2++ )
         {
-            greyImagePixelSum += greyImage->at<float>(y+y2,x+x2);
+            double summand = greyImage->at<float>(y+y2,x+x2);
+            greyImagePixelSum += summand;
+            greyImagePixelSumPow += pow(summand, 2);
+        }
+    }
+    for( int y2=0; y2<greyPattern->rows; y2++ )
+    {
+        for( int x2=0; x2<greyPattern->cols; x2++ )
+        {
+                pixelResult += pow( tmpFunction(x2,y2, method) - imgFunction(x+x2,y+y2, greyImagePixelSum, method), (float)(2.0) );
+        }
+    }
+    if (method == 8)
+    {
+        pixelResult /= sqrt( greyPatternPixelSumPow * greyImagePixelSumPow );
+    }
 
-        }
-    }
-    for( int y2=0; y2<greyPattern->rows; y2++ )
-    {
-        for( int x2=0; x2<greyPattern->cols; x2++ )
-        {
-            pixelResult += pow( tmpFunction(x2,y2) - imgFunction(x+x2,y+y2, greyImagePixelSum), (float)(2.0) );
-        }
-    }
     return pixelResult;
 }
 
-float MainWindow::tmpFunction( int x, int y )
+float MainWindow::tmpFunction( int x, int y, int method )
 {
     float result;
-    result = greyPattern->at<float>(y,x) - greyPatternPixelSum/(greyPattern->cols * greyPattern->rows);
+
+    result = greyPattern->at<float>(y,x);
+    if (method > 6)
+    {
+        result -= greyPatternPixelSum/(greyPattern->cols * greyPattern->rows);
+    }
     return result;
 }
 
-float MainWindow::imgFunction( int x, int y, double greyImagePixelSum )
+float MainWindow::imgFunction( int x, int y, double greyImagePixelSum, int method )
 {
-
     float result;
-    result = greyImage->at<float>(y,x) - greyImagePixelSum/(greyPattern->cols * greyPattern->rows);
+
+    result = greyImage->at<float>(y,x);
+    if(method > 6)
+    {
+        result -= greyImagePixelSum/(greyPattern->cols * greyPattern->rows);
+    }
     return result;
 }
 

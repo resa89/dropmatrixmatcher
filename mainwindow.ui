@@ -123,13 +123,13 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>20</y>
       <width>381</width>
-      <height>581</height>
+      <height>591</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -244,14 +244,39 @@
         <widget class="QDial" name="dial"/>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="sensivityValueText">
-         <property name="maximumSize">
+        <widget class="QLabel" name="sensivityValueText">
+         <property name="minimumSize">
           <size>
-           <width>70</width>
-           <height>40</height>
+           <width>60</width>
+           <height>0</height>
           </size>
          </property>
+         <property name="frameShape">
+          <enum>QFrame::Panel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="lineWidth">
+          <number>2</number>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>
@@ -338,6 +363,19 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="findButton8">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>myDiffNormed</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -398,15 +436,6 @@
    </widget>
    <zorder>layoutWidget</zorder>
    <zorder>tabWidget</zorder>
-   <zorder>sensivityValueText</zorder>
-   <zorder>label</zorder>
-   <zorder>findButton6</zorder>
-   <zorder>findButton7</zorder>
-   <zorder>radioButton</zorder>
-   <zorder>radioButton_2</zorder>
-   <zorder>radioButton_3</zorder>
-   <zorder>radioButton_4</zorder>
-   <zorder>filterButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
