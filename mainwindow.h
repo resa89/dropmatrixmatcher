@@ -33,6 +33,7 @@ private slots:
     void setBrightness(int value);
     void setContrast(int value);
     void sensivity(int value);
+    void filterImage();
 
     void on_findButton0_clicked();
     void on_findButton1_clicked();
@@ -63,13 +64,14 @@ private:
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method, float sensivity);
-    void createGreyImage(cv::Mat colorImage);
-    void createGreyPattern(cv::Mat colorPattern);
+    void createGreyImage(cv::Mat colorImage, int cmyk=4);
+    void createGreyPattern(cv::Mat colorPattern, int cmyk=4);
     cv::Mat match(int method);
     float matchingAlgorithm( int x, int y, int method );
     float tmpFunction( int x, int y, int method );
     float imgFunction( int x, int y, double greyImagePixelSum, int method );
     void minMax(cv::Mat matResult, cv::Point* min, cv::Point* max, double* minVal, double* maxVal);
+    void filter(int cmyk);
 
 };
 

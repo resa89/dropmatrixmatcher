@@ -67,11 +67,12 @@ MainWindow::MainWindow(QWidget *parent) :
     this, SLOT(setBrightness(int)));
     connect(ui->contrastSlider, SIGNAL(valueChanged(int)),
     this, SLOT(setContrast(int)));
-
     connect(ui->dial, SIGNAL(valueChanged(int)),
             this, SLOT(sensivity(int)));
     connect(ui->dial, SIGNAL(valueChanged(int)),
             ui->sensivityValueText, SLOT(setNum(int)));
+    connect(ui->filterButton, SIGNAL(clicked()),
+            this, SLOT(filterImage()));
 }
 
 
@@ -335,10 +336,16 @@ void MainWindow::sensivity(int value)
     sensivityRange = (float)value/100;
 }
 
-void MainWindow::createGreyImage(Mat colorImage)
+void MainWindow::createGreyImage(Mat colorImage, int cmyk)
 {
     int w = colorImage.cols;
     int h = colorImage.rows;
+
+    float red = 0.299;
+    float green = 0.587;
+    float blue = 0.114;
+
+    int cmyArray[3];
 
     greyImage->create(h, w, CV_32FC1);
     greyToScreen->create(h, w, CV_32FC3);
@@ -347,20 +354,71 @@ void MainWindow::createGreyImage(Mat colorImage)
     {
         for( int x=0; x<w; x++ )
         {
-            greyImage->at<float>(y,x) = 0.299*colorImage.at<Vec3b>(y,x)[0]+0.587*colorImage.at<Vec3b>(y,x)[1]+0.114*colorImage.at<Vec3b>(y,x)[2];
-            greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
-            greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
-            greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
+            bool draw = true;
+            int first;
+            int second;
+
+            if( cmyk != 4 )
+            {
+                cmyArray[0] = 255-colorImage.at<Vec3b>(y,x)[0];
+                cmyArray[1] = 255-colorImage.at<Vec3b>(y,x)[1];
+                cmyArray[2] = 255-colorImage.at<Vec3b>(y,x)[2];
+
+                //evtl. Summe > 50 prüfen
+                if (cmyArray[0] > cmyArray[1])
+                {
+                    first = 0;
+                    second = 1;
+                }
+                else{
+                    first = 1;
+                    second = 0;
+                }
+                if(cmyArray[2] > cmyArray[first])
+                {
+                    second = first;
+                    first = 2;
+                }
+                else{
+                    if(cmyArray[2] > cmyArray[second])
+                    {
+                        second = 2;
+                    }
+                }
+                if(first != cmyk || cmyArray[first] < 1.5*cmyArray[second])   //so that color is definitly identified
+                {
+                    draw = false;
+                }
+            }
+
+            if (draw)
+            {
+                greyImage->at<float>(y,x) = red*colorImage.at<Vec3b>(y,x)[0]+green*colorImage.at<Vec3b>(y,x)[1]+blue*colorImage.at<Vec3b>(y,x)[2];
+                greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
+                greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
+                greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
+            }
+            else{
+                greyImage->at<float>(y,x) = 255;
+                greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
+                greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
+                greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
+            }
+
+
         }
     }
 }
 
-void MainWindow::createGreyPattern(Mat colorPattern)
+void MainWindow::createGreyPattern(Mat colorPattern, int cmyk)
 {
     int w = colorPattern.cols;
     int h = colorPattern.rows;
     greyPatternPixelSum = 0;
     greyPatternPixelSumPow = 0;
+    float red = 0.299;
+    float green = 0.587;
+    float blue = 0.114;
 
     greyPattern->create(h, w, CV_32FC1);
     greyToScreen->create(h, w, CV_32FC3);
@@ -369,7 +427,7 @@ void MainWindow::createGreyPattern(Mat colorPattern)
     {
         for( int x=0; x<w; x++ )
         {
-            greyPattern->at<float>(y,x) = 0.299*colorPattern.at<Vec3b>(y,x)[0]+0.587*colorPattern.at<Vec3b>(y,x)[1]+0.114*colorPattern.at<Vec3b>(y,x)[2];
+            greyPattern->at<float>(y,x) = red*colorPattern.at<Vec3b>(y,x)[0]+green*colorPattern.at<Vec3b>(y,x)[1]+blue*colorPattern.at<Vec3b>(y,x)[2];
             double summand = greyPattern->at<float>(y,x);
             greyPatternPixelSum += summand;
             greyPatternPixelSumPow += pow(summand, 2);
@@ -380,3 +438,37 @@ void MainWindow::createGreyPattern(Mat colorPattern)
     }
 }
 
+void MainWindow::filterImage()
+{
+    if(this->ui->radioC->isChecked())
+    {
+        this->filter(0);
+    }
+    if(this->ui->radioM->isChecked())
+    {
+        this->filter(1);
+    }
+    if(this->ui->radioY->isChecked())
+    {
+        this->filter(2);
+    }
+    if(this->ui->radioK->isChecked())
+    {
+        this->filter(3);
+    }
+}
+
+void MainWindow::filter(int cmyk)
+{
+    Mat matImage = imread(this->imagePath.toStdString());
+    Mat matPattern = imread(this->patternPath.toStdString());
+
+    int w = ui->imageLabel_2->width();
+    int h = ui->imageLabel_2->height();
+
+    createGreyImage(matImage, cmyk);
+    //createGreyPattern(matPattern, cmyk);      //filter not allowed before pattern loaded
+
+    QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+    ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
+}

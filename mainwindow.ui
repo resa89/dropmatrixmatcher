@@ -128,8 +128,8 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>381</width>
-      <height>591</height>
+      <width>396</width>
+      <height>597</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -299,28 +299,28 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_8">
        <item>
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="radioC">
          <property name="text">
           <string>C</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_2">
+        <widget class="QRadioButton" name="radioM">
          <property name="text">
           <string>M</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_3">
+        <widget class="QRadioButton" name="radioY">
          <property name="text">
           <string>Y</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_4">
+        <widget class="QRadioButton" name="radioK">
          <property name="text">
           <string>black</string>
          </property>
