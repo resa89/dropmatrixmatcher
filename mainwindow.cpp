@@ -14,7 +14,7 @@
 using namespace std;
 using namespace cv;
 
-float sensivityRange = 0;
+float sensitivityRange = 0;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -68,9 +68,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->contrastSlider, SIGNAL(valueChanged(int)),
     this, SLOT(setContrast(int)));
     connect(ui->dial, SIGNAL(valueChanged(int)),
-            this, SLOT(sensivity(int)));
+            this, SLOT(sensitivity(int)));
     connect(ui->dial, SIGNAL(valueChanged(int)),
-            ui->sensivityValueText, SLOT(setNum(int)));
+            ui->sensitivityValueText, SLOT(setNum(int)));
     connect(ui->filterButton, SIGNAL(clicked()),
             this, SLOT(filterImage()));
 }
@@ -202,47 +202,47 @@ void MainWindow::displayImageInImageLabel(Mat mat)
 
 void MainWindow::on_findButton0_clicked()
 {
-    matchingWithMethod(0, sensivityRange);
+    matchingWithMethod(0, sensitivityRange);
 }
 
 void MainWindow::on_findButton1_clicked()
 {
-    matchingWithMethod(1, sensivityRange);
+    matchingWithMethod(1, sensitivityRange);
 }
 
 void MainWindow::on_findButton2_clicked()
 {
-    matchingWithMethod(2, sensivityRange);
+    matchingWithMethod(2, sensitivityRange);
 }
 
 void MainWindow::on_findButton3_clicked()
 {
-    matchingWithMethod(3, sensivityRange);
+    matchingWithMethod(3, sensitivityRange);
 }
 
 void MainWindow::on_findButton4_clicked()
 {
-    matchingWithMethod(4, sensivityRange);
+    matchingWithMethod(4, sensitivityRange);
 }
 
 void MainWindow::on_findButton5_clicked()
 {
-    matchingWithMethod(5, sensivityRange);
+    matchingWithMethod(5, sensitivityRange);
 }
 
 void MainWindow::on_findButton6_clicked()
 {
-    matchingWithMethod(6, sensivityRange);
+    matchingWithMethod(6, sensitivityRange);
 }
 
 void MainWindow::on_findButton7_clicked()
 {
-    matchingWithMethod(7, sensivityRange);
+    matchingWithMethod(7, sensitivityRange);
 }
 
 void MainWindow::on_findButton8_clicked()
 {
-    matchingWithMethod(8, sensivityRange);
+    matchingWithMethod(8, sensitivityRange);
 }
 
 void MainWindow::on_LoadSelectedPattern_clicked()
@@ -331,112 +331,11 @@ void MainWindow::setContrast(int value)
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
 }
 
-void MainWindow::sensivity(int value)
+void MainWindow::sensitivity(int value)
 {
-    sensivityRange = (float)value/100;
+    sensitivityRange = (float)value/100;
 }
 
-void MainWindow::createGreyImage(Mat colorImage, int cmyk)
-{
-    int w = colorImage.cols;
-    int h = colorImage.rows;
-
-    float red = 0.299;
-    float green = 0.587;
-    float blue = 0.114;
-
-    int cmyArray[3];
-
-    greyImage->create(h, w, CV_32FC1);
-    greyToScreen->create(h, w, CV_32FC3);
-
-    for( int y=0; y<h; y++ )
-    {
-        for( int x=0; x<w; x++ )
-        {
-            bool draw = true;
-            int first;
-            int second;
-
-            if( cmyk != 4 )
-            {
-                cmyArray[0] = 255-colorImage.at<Vec3b>(y,x)[0];
-                cmyArray[1] = 255-colorImage.at<Vec3b>(y,x)[1];
-                cmyArray[2] = 255-colorImage.at<Vec3b>(y,x)[2];
-
-                //evtl. Summe > 50 prüfen
-                if (cmyArray[0] > cmyArray[1])
-                {
-                    first = 0;
-                    second = 1;
-                }
-                else{
-                    first = 1;
-                    second = 0;
-                }
-                if(cmyArray[2] > cmyArray[first])
-                {
-                    second = first;
-                    first = 2;
-                }
-                else{
-                    if(cmyArray[2] > cmyArray[second])
-                    {
-                        second = 2;
-                    }
-                }
-                if(first != cmyk || cmyArray[first] < 1.5*cmyArray[second])   //so that color is definitly identified
-                {
-                    draw = false;
-                }
-            }
-
-            if (draw)
-            {
-                greyImage->at<float>(y,x) = red*colorImage.at<Vec3b>(y,x)[0]+green*colorImage.at<Vec3b>(y,x)[1]+blue*colorImage.at<Vec3b>(y,x)[2];
-                greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
-                greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
-                greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
-            }
-            else{
-                greyImage->at<float>(y,x) = 255;
-                greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
-                greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
-                greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
-            }
-
-
-        }
-    }
-}
-
-void MainWindow::createGreyPattern(Mat colorPattern, int cmyk)
-{
-    int w = colorPattern.cols;
-    int h = colorPattern.rows;
-    greyPatternPixelSum = 0;
-    greyPatternPixelSumPow = 0;
-    float red = 0.299;
-    float green = 0.587;
-    float blue = 0.114;
-
-    greyPattern->create(h, w, CV_32FC1);
-    greyToScreen->create(h, w, CV_32FC3);
-
-    for( int y=0; y<h; y++ )
-    {
-        for( int x=0; x<w; x++ )
-        {
-            greyPattern->at<float>(y,x) = red*colorPattern.at<Vec3b>(y,x)[0]+green*colorPattern.at<Vec3b>(y,x)[1]+blue*colorPattern.at<Vec3b>(y,x)[2];
-            double summand = greyPattern->at<float>(y,x);
-            greyPatternPixelSum += summand;
-            greyPatternPixelSumPow += pow(summand, 2);
-            greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyPattern->at<float>(y,x);             //greyToScreen only for Testing
-            greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyPattern->at<float>(y,x);             //
-            greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyPattern->at<float>(y,x);             //
-        }
-    }
-}
 
 void MainWindow::filterImage()
 {

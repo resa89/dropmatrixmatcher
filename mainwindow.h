@@ -32,7 +32,7 @@ private slots:
     void enableFindButtons();
     void setBrightness(int value);
     void setContrast(int value);
-    void sensivity(int value);
+    void sensitivity(int value);
     void filterImage();
 
     void on_findButton0_clicked();
@@ -63,7 +63,7 @@ private:
     double greyPatternPixelSumPow;
 
     void displayImageInImageLabel(cv::Mat image);
-    void matchingWithMethod(int method, float sensivity);
+    void matchingWithMethod(int method, float sensitivity);
     void createGreyImage(cv::Mat colorImage, int cmyk=4);
     void createGreyPattern(cv::Mat colorPattern, int cmyk=4);
     cv::Mat match(int method);

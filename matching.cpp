@@ -24,7 +24,7 @@ int max_Trackbar = 5;
 /// Function Headers
 //void MatchingMethod( int, void* );
 
-void MainWindow::matchingWithMethod(int method, float sensivity)
+void MainWindow::matchingWithMethod(int method, float sensitivity)
 {
 
     match_method = method;
@@ -69,6 +69,7 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
         /// Localizing the best match with minMaxLoc
         double minVal; double maxVal; Point minLoc; Point maxLoc;
         Point matchLoc;
+
         if (match_method < 6)
         {
             minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
@@ -91,7 +92,7 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
             float test = result.at<float>(minLoc.y, minLoc.x);
              result.at<float>(minLoc.y, minLoc.x)=1;
             test = result.at<float>(minLoc.y, minLoc.x);
-           if(minVal>=1-sensivity)
+           if(minVal>=1-sensitivity)
             {
                 i=50;
             }
@@ -99,7 +100,7 @@ void MainWindow::matchingWithMethod(int method, float sensivity)
         else
         {
             result.at<float>(maxLoc.y, maxLoc.x)=0;
-            if(maxVal<=sensivity)
+            if(maxVal<=sensitivity)
             {
                 i=50;
             }
