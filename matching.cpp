@@ -62,7 +62,7 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
         result = match(method);
     }
 
-    normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
+    //normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
 
     for( int i=0; i<50; i++ ){
 
@@ -130,7 +130,7 @@ Mat MainWindow::match(int method)
 
 float MainWindow::matchingAlgorithm(int x, int y, int method)
 {
-    float pixelResult = 0;
+    double pixelResult = 0;
     double greyImagePixelSum = 0;
     double greyImagePixelSumPow = 0;
     for( int y2=0; y2<greyPattern->rows; y2++ )
@@ -139,14 +139,15 @@ float MainWindow::matchingAlgorithm(int x, int y, int method)
         {
             double summand = greyImage->at<float>(y+y2,x+x2);
             greyImagePixelSum += summand;
-            greyImagePixelSumPow += pow(summand, 2);
+            greyImagePixelSumPow += summand*summand;
         }
     }
     for( int y2=0; y2<greyPattern->rows; y2++ )
     {
         for( int x2=0; x2<greyPattern->cols; x2++ )
         {
-                pixelResult += pow( tmpFunction(x2,y2, method) - imgFunction(x+x2,y+y2, greyImagePixelSum, method), (float)(2.0) );
+                float tmp = tmpFunction(x2,y2, method) - imgFunction(x+x2,y+y2, greyImagePixelSum, method);
+                pixelResult += tmp*tmp;
         }
     }
     if (method == 8)

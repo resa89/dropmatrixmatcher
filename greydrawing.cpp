@@ -33,10 +33,29 @@ void MainWindow::createGreyImage(Mat colorImage, int cmyk)
             if( cmyk != 4 )
             {
                 ///converting to CMY values
-                cmyArray[0] = 255-colorImage.at<Vec3b>(y,x)[0];
+                cmyArray[0] = 255-colorImage.at<Vec3b>(y,x)[2];
                 cmyArray[1] = 255-colorImage.at<Vec3b>(y,x)[1];
-                cmyArray[2] = 255-colorImage.at<Vec3b>(y,x)[2];
+                cmyArray[2] = 255-colorImage.at<Vec3b>(y,x)[0];
 
+                greyImage->at<float>(y,x) = 255-cmyArray[cmyk];
+                             //greyToScreen only for Testing
+                greyToScreen->at<Vec3b>(y,x)[cmyk] = (unsigned char)greyImage->at<float>(y,x);             //
+                greyToScreen->at<Vec3b>(y,x)[(cmyk+1)%3] = 255;
+                greyToScreen->at<Vec3b>(y,x)[(cmyk+2)%3] = 255;             //
+            }
+            else{
+
+                greyImage->at<float>(y,x) = red*colorImage.at<Vec3b>(y,x)[0]+green*colorImage.at<Vec3b>(y,x)[1]+blue*colorImage.at<Vec3b>(y,x)[2];
+                greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
+                greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
+                greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
+            }
+            /*
+            greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
+            greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
+            greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
+            */
+/*
                 ///finding largest cmy value
                 if (cmyArray[0] > cmyArray[1])
                 {
@@ -74,11 +93,13 @@ void MainWindow::createGreyImage(Mat colorImage, int cmyk)
             }
             ///draw white pixel
             else{
-                greyImage->at<float>(y,x) = 255;
+                c 255;
                 greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
                 greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //
                 greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyImage->at<float>(y,x);             //
             }
+            */
+
         }
     }
 }
@@ -103,7 +124,7 @@ void MainWindow::createGreyPattern(Mat colorPattern, int cmyk)          //filter
             greyPattern->at<float>(y,x) = red*colorPattern.at<Vec3b>(y,x)[0]+green*colorPattern.at<Vec3b>(y,x)[1]+blue*colorPattern.at<Vec3b>(y,x)[2];
             double summand = greyPattern->at<float>(y,x);
             greyPatternPixelSum += summand;
-            greyPatternPixelSumPow += pow(summand, 2);
+            greyPatternPixelSumPow += summand*summand;
             greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyPattern->at<float>(y,x);             //greyToScreen only for Testing
             greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyPattern->at<float>(y,x);             //
             greyToScreen->at<Vec3b>(y,x)[2] = (unsigned char)greyPattern->at<float>(y,x);             //

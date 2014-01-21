@@ -132,12 +132,13 @@ void MainWindow::on_loadImage_clicked()
     ///check active tab
     if(tabnumber == 0 )
     {
-        Mat matImage;
+        //Mat matImage;
         image->load(fileName);
         //*image = image->convertToFormat(QImage::Format_RGB888);
         imagePath = fileName;
 
-        matImage = imread(this->imagePath.toStdString());
+        //matImage = imread(this->imagePath.toStdString());
+        Mat matImage(image->height(),image->width(),CV_8UC3,image->data_ptr());
         createGreyImage(matImage);
 
         int w = ui->imageLabel->width();
