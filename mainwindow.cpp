@@ -2,6 +2,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+//#include "opencv2/imgproc/types_c.h"
 
 #include <QFileDialog>
 #include <QStringList>
@@ -10,6 +11,7 @@
 #include <iostream>
 #include <stdio.h>
 //#include <math.h>
+
 
 using namespace std;
 using namespace cv;
@@ -54,7 +56,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->contrastSlider->setMinimum(1.0);
     //ui->contrastSlider->setMaximum(3.0);
 
-
     // Only if images are uploaded, find button is enabled
     connect(ui->loadImage, SIGNAL(clicked()),
             this, SLOT(enableFindButtons()));
@@ -71,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(sensitivity(int)));
     connect(ui->dial, SIGNAL(valueChanged(int)),
             ui->sensitivityValueText, SLOT(setNum(int)));
-    connect(ui->filterButton, SIGNAL(clicked()),
+    connect(ui->filterButton, SIGNAL(clicked(bool)),
             this, SLOT(filterImage()));
 }
 
@@ -132,22 +133,25 @@ void MainWindow::on_loadImage_clicked()
     ///check active tab
     if(tabnumber == 0 )
     {
-        //Mat matImage;
+        Mat matImage;
         image->load(fileName);
         //*image = image->convertToFormat(QImage::Format_RGB888);
         imagePath = fileName;
 
-        //matImage = imread(this->imagePath.toStdString());
-        Mat matImage(image->height(),image->width(),CV_8UC3,image->data_ptr());
+        matImage = imread(this->imagePath.toStdString());
+
+        /* ///use Mat constructor to load image
+        QImage swapped = image->rgbSwapped();
+        Mat matImage = this->qimage_to_mat_cpy(swapped, CV_8UC3);
+        */
+        //Mat matImage( swapped.height(), swapped.width(), CV_8UC3, const_cast<uchar*>(swapped.bits()), swapped.bytesPerLine() ).clone();
         createGreyImage(matImage);
 
         int w = ui->imageLabel->width();
         int h = ui->imageLabel->height();
-
-        //greyToScreen(greyImage->cols,greyImage->rows,greyImage->type());
-       // cv::cvtColor(*greyImage, greyToScreen,CV_BGR2RGB);
-
         QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+
+        //QImage greyQImage = QImage((unsigned char*) matImage.data, matImage.cols, matImage.rows, matImage.step, QImage::Format_RGB888);
         ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
 
         ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
@@ -337,7 +341,6 @@ void MainWindow::sensitivity(int value)
     sensitivityRange = (float)value/100;
 }
 
-
 void MainWindow::filterImage()
 {
     if(this->ui->radioC->isChecked())
@@ -356,6 +359,17 @@ void MainWindow::filterImage()
     {
         this->filter(3);
     }
+    if (this->ui->filterButton->isFlat()){
+         this->filter(4);
+         this->ui->filterButton->setFlat(false);
+    }else{
+         this->ui->filterButton->setFlat(true);
+    }
+}
+
+void MainWindow::on_greyPattern_clicked()
+{
+ //
 }
 
 void MainWindow::filter(int cmyk)
@@ -363,12 +377,24 @@ void MainWindow::filter(int cmyk)
     Mat matImage = imread(this->imagePath.toStdString());
     Mat matPattern = imread(this->patternPath.toStdString());
 
-    int w = ui->imageLabel_2->width();
-    int h = ui->imageLabel_2->height();
+    int w = ui->imageLabel->width();
+    int h = ui->imageLabel->height();
 
     createGreyImage(matImage, cmyk);
     //createGreyPattern(matPattern, cmyk);      //filter not allowed before pattern loaded
 
     QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-    ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
+    ui->imageLabel->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
+}
+
+Mat MainWindow::qimage_to_mat_cpy(QImage const &img, int format)
+{
+    Mat mat(img.height(), img.width(), format);
+    for (int i=0;i<img.height();i++) {
+            memcpy(mat.ptr(i),img.scanLine(i),img.bytesPerLine());
+        }
+    return mat;
+    //return Mat(img.height(), img.width(), format, img.bits(), img.bytesPerLine()).clone();
+    //return Mat(img.height(), img.width(), format, const_cast<uchar*>(img.bits()), img.bytesPerLine()).clone();
+    //return Mat(img.height(),img.width(),CV_8UC3,img.byteCount());
 }

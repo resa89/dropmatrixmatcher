@@ -44,6 +44,7 @@ private slots:
     void on_findButton6_clicked();
     void on_findButton7_clicked();
     void on_findButton8_clicked();
+    void on_greyPattern_clicked();
 
     void on_LoadSelectedPattern_clicked();
 
@@ -72,6 +73,8 @@ private:
     float imgFunction( int x, int y, double greyImagePixelSum, int method );
     void minMax(cv::Mat matResult, cv::Point* min, cv::Point* max, double* minVal, double* maxVal);
     void filter(int cmyk);
+    cv::Mat qimage_to_mat_cpy(QImage const &img, int format);
+
 
 };
 

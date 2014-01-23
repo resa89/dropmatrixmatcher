@@ -32,7 +32,7 @@
       <x>400</x>
       <y>10</y>
       <width>900</width>
-      <height>600</height>
+      <height>621</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -42,7 +42,7 @@
      </size>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -51,10 +51,10 @@
      <widget class="ProLabel" name="imageLabel">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>-1</x>
         <y>0</y>
-        <width>880</width>
-        <height>560</height>
+        <width>881</width>
+        <height>591</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -90,10 +90,10 @@
      <widget class="ProLabel" name="imageLabel_2">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>-1</x>
         <y>0</y>
-        <width>880</width>
-        <height>560</height>
+        <width>881</width>
+        <height>591</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -127,9 +127,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>26</y>
+      <y>20</y>
       <width>381</width>
-      <height>591</height>
+      <height>611</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -251,6 +251,12 @@
            <height>0</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>35</height>
+          </size>
+         </property>
          <property name="frameShape">
           <enum>QFrame::Panel</enum>
          </property>
@@ -266,35 +272,13 @@
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+        <widget class="QPushButton" name="greyView">
+         <property name="text">
+          <string>grey View</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>185</width>
-         <height>5</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -330,6 +314,12 @@
         <widget class="QPushButton" name="filterButton">
          <property name="text">
           <string>filter</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -427,6 +417,42 @@
         <widget class="QPushButton" name="findButton4">
          <property name="text">
           <string>TM COEFF</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_11">
+       <item>
+        <widget class="QLabel" name="brightness_2">
+         <property name="text">
+          <string>Helligkeit</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="brightnessSlider_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <item>
+        <widget class="QLabel" name="contrast_2">
+         <property name="text">
+          <string>Kontrast</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="contrastSlider_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
