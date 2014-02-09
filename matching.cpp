@@ -26,8 +26,8 @@ int max_Trackbar = 5;
 
 void MainWindow::matchingWithMethod(int method, float sensitivity)
 {
-
     match_method = method;
+    float exitValue;
     int tabnumber;
     tabnumber = ui->tabWidget->currentIndex();
 
@@ -53,57 +53,34 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
     result.create( result_cols, result_rows, CV_32FC1 );
 
     /// Do the Matching and Normalize
-    if (match_method < 6)
-    {
-        matchTemplate( img, templ, result, match_method );
-    }
-    else
-    {
-        result = match(method);
-    }
+    result = match(method);
 
-    //normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
+    /// Localizing the best match with minMaxLoc
+    double minVal; double maxVal; Point minLoc; Point maxLoc;
+    Point matchLoc;
 
     for( int i=0; i<50; i++ ){
 
-        /// Localizing the best match with minMaxLoc
-        double minVal; double maxVal; Point minLoc; Point maxLoc;
-        Point matchLoc;
-
-        if (match_method < 6)
+        minMax(result, &minLoc, &maxLoc, &minVal, &maxVal);
+        if (i==0)
         {
-            minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
+            exitValue = (float)(maxVal-(maxVal-minVal)*sensitivity);
+        }
+        if((float)minVal>=(exitValue*1.00001))
+        {
+            i=50;
         }
         else
         {
-            minMax(result, &minLoc, &maxLoc, &minVal, &maxVal);
-        }
-        /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED || match_method >= 6 )
-          { matchLoc = minLoc; }
-        else
-          { matchLoc = maxLoc; }
+           /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
+           matchLoc = minLoc;
 
-        /// Show me what you got
-        rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
+           /// Show me what you got
+           rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
 
-        if(method<=1 || method >=6 )
-        {
-            float test = result.at<float>(minLoc.y, minLoc.x);
-             result.at<float>(minLoc.y, minLoc.x)=1;
-            test = result.at<float>(minLoc.y, minLoc.x);
-           if(minVal>=1-sensitivity)
-            {
-                i=50;
-            }
-        }
-        else
-        {
-            result.at<float>(maxLoc.y, maxLoc.x)=0;
-            if(maxVal<=sensitivity)
-            {
-                i=50;
-            }
+           float test = result.at<float>(minLoc.y, minLoc.x);
+            result.at<float>(minLoc.y, minLoc.x)=maxVal;
+           test = result.at<float>(minLoc.y, minLoc.x);
         }
     }
     this->displayImageInImageLabel(img_display);
@@ -130,14 +107,14 @@ Mat MainWindow::match(int method)
 
 float MainWindow::matchingAlgorithm(int x, int y, int method)
 {
-    double pixelResult = 0;
+    float pixelResult = 0;
     double greyImagePixelSum = 0;
     double greyImagePixelSumPow = 0;
     for( int y2=0; y2<greyPattern->rows; y2++ )
     {
         for( int x2=0; x2<greyPattern->cols; x2++ )
         {
-            double summand = greyImage->at<float>(y+y2,x+x2);
+            float summand = greyImage->at<float>(y+y2,x+x2);
             greyImagePixelSum += summand;
             greyImagePixelSumPow += summand*summand;
         }
@@ -205,4 +182,71 @@ void MainWindow::minMax(Mat matResult, Point* min, Point* max, double* minVal, d
             }
         }
     }
+}
+
+void MainWindow::matchingWithCvMethod(int method, float sensitivity)
+{
+    match_method = method;
+    int tabnumber;
+    tabnumber = ui->tabWidget->currentIndex();
+
+    /// Load image and template
+    if (tabnumber == 0)
+    {
+        img = imread(this->imagePath.toStdString());
+    }
+    else
+    {
+        img = imread(this->imagePath_2.toStdString());
+    }
+
+    templ = imread(this->patternPath.toStdString());
+
+    /// Source image to display
+    img.copyTo( img_display );
+
+    /// Create the result matrix
+    int result_cols =  img.cols - templ.cols + 1;
+    int result_rows = img.rows - templ.rows + 1;
+
+    result.create( result_cols, result_rows, CV_32FC1 );
+
+    /// Do the Matching and Normalize
+    matchTemplate( img, templ, result, match_method );
+    normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
+
+    for( int i=0; i<50; i++ ){
+
+        /// Localizing the best match with minMaxLoc
+        double minVal; double maxVal; Point minLoc; Point maxLoc;
+        Point matchLoc;
+
+        minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
+        /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
+        if( match_method  == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED )
+          { matchLoc = minLoc; }
+        else
+          { matchLoc = maxLoc; }
+
+        /// Show me what you got
+        rectangle( img_display, matchLoc, Point( matchLoc.x + templ.cols , matchLoc.y + templ.rows ), Scalar::all(0), 2, 8, 0 );
+
+        if(method<=1)
+        {
+             result.at<float>(minLoc.y, minLoc.x)=1;
+           if(minVal>=1-sensitivity)
+            {
+                i=50;
+            }
+        }
+        else
+        {
+            result.at<float>(maxLoc.y, maxLoc.x)=0;
+            if(maxVal<=sensitivity)
+            {
+                i=50;
+            }
+        }
+    }
+    this->displayImageInImageLabel(img_display);
 }

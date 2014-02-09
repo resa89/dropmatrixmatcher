@@ -65,6 +65,7 @@ private:
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method, float sensitivity);
+    void matchingWithCvMethod(int method, float sensitivity);
     void createGreyImage(cv::Mat colorImage, int cmyk=4);
     void createGreyPattern(cv::Mat colorPattern, int cmyk=4);
     cv::Mat match(int method);

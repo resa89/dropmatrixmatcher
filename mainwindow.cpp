@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageLabel_2->setPixmap(QPixmap::fromImage(*image_2));
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern));
     ui->dial->setRange(0,100);
+    ui->tabWidget->setCurrentIndex(0);
 
     ui->findButton0->setDefault(true);
     ui->findButton0->setEnabled(false);
@@ -207,32 +208,32 @@ void MainWindow::displayImageInImageLabel(Mat mat)
 
 void MainWindow::on_findButton0_clicked()
 {
-    matchingWithMethod(0, sensitivityRange);
+    matchingWithCvMethod(0, sensitivityRange);
 }
 
 void MainWindow::on_findButton1_clicked()
 {
-    matchingWithMethod(1, sensitivityRange);
+    matchingWithCvMethod(1, sensitivityRange);
 }
 
 void MainWindow::on_findButton2_clicked()
 {
-    matchingWithMethod(2, sensitivityRange);
+    matchingWithCvMethod(2, sensitivityRange);
 }
 
 void MainWindow::on_findButton3_clicked()
 {
-    matchingWithMethod(3, sensitivityRange);
+    matchingWithCvMethod(3, sensitivityRange);
 }
 
 void MainWindow::on_findButton4_clicked()
 {
-    matchingWithMethod(4, sensitivityRange);
+    matchingWithCvMethod(4, sensitivityRange);
 }
 
 void MainWindow::on_findButton5_clicked()
 {
-    matchingWithMethod(5, sensitivityRange);
+    matchingWithCvMethod(5, sensitivityRange);
 }
 
 void MainWindow::on_findButton6_clicked()
