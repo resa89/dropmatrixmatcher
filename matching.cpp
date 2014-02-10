@@ -200,7 +200,7 @@ void MainWindow::matchingWithCvMethod(int method, float sensitivity)
         img = imread(this->imagePath_2.toStdString());
     }
 
-    templ = imread(this->patternPath.toStdString());
+    templ = *coloredPattern;
 
     /// Source image to display
     img.copyTo( img_display );

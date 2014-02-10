@@ -25,9 +25,12 @@ MainWindow::MainWindow(QWidget *parent) :
     image = new QImage;
     image_2 = new QImage;
     greyImage = new Mat;
+    coloredPattern = new Mat;
+    coloredImage = new Mat;
     pattern = new QImage;
     greyPattern = new Mat;
     greyToScreen = new Mat;
+    colored = true;
 
     ui->setupUi(this);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
@@ -51,11 +54,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->findButton5->setDefault(true);
     ui->findButton5->setEnabled(false);
 
-    //ui->brightnessSlider->setMinimum(0);
-    //ui->brightnessSlider->setMinimum(100);
-    //ui->brightnessSlider->setValue(0);
-    //ui->contrastSlider->setMinimum(1.0);
-    //ui->contrastSlider->setMaximum(3.0);
+    ui->brightnessSlider->setMinimum(-100);
+    ui->brightnessSlider->setMaximum(100);
+    ui->brightnessSlider->setSliderPosition(0);
+    ui->contrastSlider->setMinimum(0);
+    ui->contrastSlider->setMaximum(200);
+    ui->contrastSlider->setSliderPosition(100);
+
+    ui->brightnessSlider_2->setMinimum(-100);
+    ui->brightnessSlider_2->setMaximum(100);
+    ui->brightnessSlider_2->setSliderPosition(0);
+    ui->contrastSlider_2->setMinimum(0);
+    ui->contrastSlider_2->setMaximum(200);
+    ui->contrastSlider_2->setSliderPosition(100);
 
     // Only if images are uploaded, find button is enabled
     connect(ui->loadImage, SIGNAL(clicked()),
@@ -69,12 +80,19 @@ MainWindow::MainWindow(QWidget *parent) :
     this, SLOT(setBrightness(int)));
     connect(ui->contrastSlider, SIGNAL(valueChanged(int)),
     this, SLOT(setContrast(int)));
+    connect(ui->brightnessSlider_2, SIGNAL(valueChanged(int)),
+    this, SLOT(setImageBrightness(int)));
+    connect(ui->contrastSlider_2, SIGNAL(valueChanged(int)),
+    this, SLOT(setImageContrast(int)));
+
     connect(ui->dial, SIGNAL(valueChanged(int)),
             this, SLOT(sensitivity(int)));
     connect(ui->dial, SIGNAL(valueChanged(int)),
             ui->sensitivityValueText, SLOT(setNum(int)));
     connect(ui->filterButton, SIGNAL(clicked(bool)),
             this, SLOT(filterImage()));
+    connect(ui->greyView, SIGNAL(clicked(bool)),
+            this, SLOT(useGreyPattern()));
 }
 
 
@@ -118,7 +136,8 @@ void MainWindow::on_loadPattern_clicked()
     ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
     /*--> nur für Testing */
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));  //evtl weglassen, wenn standardmäßig image/pattern in label angezeigt wird
-
+    ui->brightnessSlider->setSliderPosition(0);
+    ui->contrastSlider->setSliderPosition(100);
 }
 
 void MainWindow::on_loadImage_clicked()
@@ -167,6 +186,8 @@ void MainWindow::on_loadImage_clicked()
         int h = ui->imageLabel_2->height();
         ui->imageLabel_2->setPixmap(QPixmap::fromImage(*image_2).scaled(w,h,Qt::KeepAspectRatio));
     }
+    ui->brightnessSlider_2->setSliderPosition(0);
+    ui->contrastSlider_2->setSliderPosition(100);
 }
 
 void MainWindow::displayImageInImageLabel(Mat mat)
@@ -280,7 +301,8 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     /*--> nur für Testing */
 
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
-
+    ui->brightnessSlider->setSliderPosition(0);
+    ui->contrastSlider->setSliderPosition(100);
 }
 
 void MainWindow::setBrightness(int value)
@@ -290,6 +312,7 @@ void MainWindow::setBrightness(int value)
     /// Read pattern
     Mat matImage = imread(this->patternPath.toStdString());
     Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
+    float contrast = (float)(this->ui->contrastSlider->value())/100;
 
     /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
     for( int y = 0; y < matImage.rows; y++ )
@@ -298,13 +321,15 @@ void MainWindow::setBrightness(int value)
         {
             for( int c = 0; c < 3; c++ )
             {
-               new_image.at<Vec3b>(y,x)[c] = saturate_cast<uchar>( matImage.at<Vec3b>(y,x)[c] + value );
+               new_image.at<Vec3b>(y,x)[c] = saturate_cast<uchar>( contrast *(matImage.at<Vec3b>(y,x)[c]) + value );
             }
         }
     }    
 
    *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
-    pattern->save("/Users/resa/Studium/WiSe2013/Thesis/pattern01.png", 0, 100);
+    pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
+    *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
+    createGreyPattern(*coloredPattern);
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
 
 }
@@ -317,8 +342,8 @@ void MainWindow::setContrast(int value)
     Mat matImage = imread(this->patternPath.toStdString());
     Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
 
-    float contrast = (float)value/100*2+1;
-
+    float contrast = (float)value/100;
+    int brightness = this->ui->brightnessSlider->value();
 
     /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
     for( int y = 0; y < matImage.rows; y++ )
@@ -327,14 +352,78 @@ void MainWindow::setContrast(int value)
         {
             for( int c = 0; c < 3; c++ )
             {
-                new_image.at<Vec3b>(y,x)[c] = saturate_cast<uchar>( contrast*( matImage.at<Vec3b>(y,x)[c] ) );
+                new_image.at<Vec3b>(y,x)[c] = saturate_cast<uchar>( contrast*( matImage.at<Vec3b>(y,x)[c] ) + brightness );
             }
         }
     }
 
     *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
-    pattern->save("/Users/resa/Studium/WiSe2013/Thesis/pattern01.png", 0, 100);
+
+    pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
+    *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
+    createGreyPattern(*coloredPattern);
+
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
+}
+void MainWindow::setImageBrightness(int value)
+{
+    int w = ui->imageLabel->width();
+    int h = ui->imageLabel->height();
+    /// Read pattern
+    Mat matImage = imread(this->imagePath.toStdString());
+    Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
+    float contrast = (float)(this->ui->contrastSlider_2->value())/100;
+
+    /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
+    for( int y = 0; y < matImage.rows; y++ )
+    {
+        for( int x = 0; x < matImage.cols; x++ )
+        {
+            for( int c = 0; c < 3; c++ )
+            {
+               new_image.at<Vec3b>(y,x)[c] = saturate_cast<uchar>( contrast *(matImage.at<Vec3b>(y,x)[c]) + value );
+            }
+        }
+    }
+
+   *image = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
+    image->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
+    *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+    createGreyPattern(*coloredImage);
+    ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
+
+}
+
+void MainWindow::setImageContrast(int value)
+{
+    int w = ui->imageLabel->width();
+    int h = ui->imageLabel->height();
+    /// Read pattern
+    Mat matImage = imread(this->imagePath.toStdString());
+    Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
+
+    float contrast = (float)value/100;
+    int brightness = this->ui->brightnessSlider_2->value();
+
+    /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
+    for( int y = 0; y < matImage.rows; y++ )
+    {
+        for( int x = 0; x < matImage.cols; x++ )
+        {
+            for( int c = 0; c < 3; c++ )
+            {
+                new_image.at<Vec3b>(y,x)[c] = saturate_cast<uchar>( contrast*( matImage.at<Vec3b>(y,x)[c] ) + brightness );
+            }
+        }
+    }
+
+    *image = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
+
+    image->save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
+    *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+    createGreyPattern(*coloredImage);
+
+    ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
 }
 
 void MainWindow::sensitivity(int value)
@@ -360,17 +449,35 @@ void MainWindow::filterImage()
     {
         this->filter(3);
     }
+
     if (this->ui->filterButton->isFlat()){
-         this->filter(4);
+        int w = ui->imageLabel->width();
+        int h = ui->imageLabel->height();
+        //image show colored
+        ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
+        // und sag dass colred benutzt werden soll
          this->ui->filterButton->setFlat(false);
     }else{
          this->ui->filterButton->setFlat(true);
     }
 }
 
-void MainWindow::on_greyPattern_clicked()
+void MainWindow::useGreyPattern()
 {
- //
+    if (this->ui->greyView->isFlat()){
+        int w = ui->imageLabel->width();
+        int h = ui->imageLabel->height();
+        //aktive image show colored
+        //wie zuletzt gefiltert oder bearbeitet (also extra auf dem system abspeichern)
+        ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
+        // und sag dass colored benutzt werden soll
+        colored = true;
+        this->ui->greyView->setFlat(false);
+    }else{
+        this->filter(4);    //im filter muss aktuelles colored Mat gefiltert werden
+        this->ui->greyView->setFlat(true);
+        colored = false;
+    }
 }
 
 void MainWindow::filter(int cmyk)

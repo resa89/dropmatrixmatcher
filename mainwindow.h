@@ -32,8 +32,12 @@ private slots:
     void enableFindButtons();
     void setBrightness(int value);
     void setContrast(int value);
+    void setImageContrast(int value);
+    void setImageBrightness(int value);
     void sensitivity(int value);
     void filterImage();
+    void useGreyPattern();
+
 
     void on_findButton0_clicked();
     void on_findButton1_clicked();
@@ -44,7 +48,6 @@ private slots:
     void on_findButton6_clicked();
     void on_findButton7_clicked();
     void on_findButton8_clicked();
-    void on_greyPattern_clicked();
 
     void on_LoadSelectedPattern_clicked();
 
@@ -52,9 +55,11 @@ private:
     Ui::MainWindow *ui;
     QImage *pattern;
     cv::Mat *greyPattern;
+    cv::Mat *coloredPattern;
     QImage *image;
     QImage *image_2;
     cv::Mat *greyImage;
+    cv::Mat *coloredImage;
     cv::Mat *greyToScreen;
     QString patternPath;
     QString imagePath;
@@ -62,6 +67,7 @@ private:
     QRect selectRect;
     double greyPatternPixelSum;
     double greyPatternPixelSumPow;
+    bool colored;
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method, float sensitivity);
