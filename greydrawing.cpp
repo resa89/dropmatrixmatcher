@@ -44,7 +44,6 @@ void MainWindow::createGreyImage(Mat colorImage, int cmyk)
                 greyToScreen->at<Vec3b>(y,x)[(cmyk+2)%3] = 255;             //
             }
             else{
-
                 greyImage->at<float>(y,x) = blue*colorImage.at<Vec3b>(y,x)[0]+green*colorImage.at<Vec3b>(y,x)[1]+red*colorImage.at<Vec3b>(y,x)[2];
                 greyToScreen->at<Vec3b>(y,x)[0] = (unsigned char)greyImage->at<float>(y,x);             //greyToScreen only for Testing
                 greyToScreen->at<Vec3b>(y,x)[1] = (unsigned char)greyImage->at<float>(y,x);             //

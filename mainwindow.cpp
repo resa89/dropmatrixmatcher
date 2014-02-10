@@ -68,6 +68,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->contrastSlider_2->setMaximum(200);
     ui->contrastSlider_2->setSliderPosition(100);
 
+    ui->sensitivityValueText->setMinimum(0);
+    ui->sensitivityValueText->setMaximum(100);
+    ui->sensitivityValueText->setValue(0);
+
     // Only if images are uploaded, find button is enabled
     connect(ui->loadImage, SIGNAL(clicked()),
             this, SLOT(enableFindButtons()));
@@ -88,7 +92,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->dial, SIGNAL(valueChanged(int)),
             this, SLOT(sensitivity(int)));
     connect(ui->dial, SIGNAL(valueChanged(int)),
-            ui->sensitivityValueText, SLOT(setNum(int)));
+            ui->sensitivityValueText, SLOT(setValue(int)));
+    connect(ui->sensitivityValueText, SIGNAL(valueChanged(int)),
+            this, SLOT(sensitivity(int)));
+    connect(ui->sensitivityValueText, SIGNAL(valueChanged(int)),
+            ui->dial, SLOT(setValue(int)));
+
     connect(ui->filterButton, SIGNAL(clicked(bool)),
             this, SLOT(filterImage()));
     connect(ui->greyView, SIGNAL(clicked(bool)),
@@ -135,10 +144,7 @@ void MainWindow::on_loadPattern_clicked()
 
     //matPattern = imread(this->patternPath.toStdString());
     //createGreyPattern(matPattern);
-    /* <-- nur für Testing*/
-    QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-    ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
-    /*--> nur für Testing */
+
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));  //evtl weglassen, wenn standardmäßig image/pattern in label angezeigt wird
     ui->brightnessSlider->setSliderPosition(0);
     ui->contrastSlider->setSliderPosition(100);
@@ -167,8 +173,6 @@ void MainWindow::on_loadImage_clicked()
 
         int w = ui->imageLabel->width();
         int h = ui->imageLabel->height();
-        QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-        ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
 
         ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
     }
@@ -203,11 +207,9 @@ void MainWindow::displayImageInImageLabel(Mat mat)
         //mat.depthMat(image->height(),image->width(),CV_8UC4,(uchar*)image->bits(),image->bytesPerLine());
 
         QImage imageToShow = QImage((unsigned char*) mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
+        imageToShow = imageToShow.rgbSwapped();
         imageToShow.save("/Users/resa/Studium/WiSe2013/Thesis/imageToShow.png", 0, 100);
-
-
         pixmap = QPixmap::fromImage(imageToShow);
-
         ui->imageLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
     }
     else
@@ -272,8 +274,10 @@ void MainWindow::on_LoadSelectedPattern_clicked()
 {
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
-    int imagewidth = this->image->width();
-    int imageheight = this->image->height();
+    QImage currentImage;
+    currentImage.load("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+    int imagewidth = currentImage.width();
+    int imageheight = currentImage.height();
     int pixmapwidth = ui->imageLabel->pixmap()->width();
     int pixmapheight = ui->imageLabel->pixmap()->height();
 
@@ -284,7 +288,7 @@ void MainWindow::on_LoadSelectedPattern_clicked()
 
     selectRect = ui->imageLabel->getQImageRect(widthFactor, heightFactor);
 
-    *pattern = this->image->copy(selectRect);
+    *pattern = currentImage.copy(selectRect);
 
     pattern->save(fileName, 0, 100);        //muss aufgehellt werden
     patternPath = fileName;
@@ -294,11 +298,6 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     createGreyPattern(*coloredPattern);
     //Mat matPattern = imread(this->patternPath.toStdString());
     //createGreyPattern(matPattern);
-    /* <-- nur für Testing*/
-    QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-    ui->imageLabel_2->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
-    /*--> nur für Testing */
-
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
     ui->brightnessSlider->setSliderPosition(0);
     ui->contrastSlider->setSliderPosition(100);
@@ -326,6 +325,7 @@ void MainWindow::setBrightness(int value)
     }    
 
    *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
+    *pattern = pattern->rgbSwapped();
     pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
     *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
     createGreyPattern(*coloredPattern);
@@ -357,7 +357,7 @@ void MainWindow::setContrast(int value)
     }
 
     *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
-
+    *pattern = pattern->rgbSwapped();
     pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
     *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
     createGreyPattern(*coloredPattern);
@@ -386,6 +386,7 @@ void MainWindow::setImageBrightness(int value)
     }
 
    *image = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
+    *image = image->rgbSwapped();
 
     image->save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
     *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
@@ -419,6 +420,7 @@ void MainWindow::setImageContrast(int value)
     }
 
     *image = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
+    *image = image->rgbSwapped();
 
     image->save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
     *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
@@ -445,10 +447,6 @@ void MainWindow::filterImage()
     if(this->ui->radioY->isChecked())
     {
         this->filter(2);
-    }
-    if(this->ui->radioK->isChecked())
-    {
-        this->filter(3);
     }
 
     if (this->ui->filterButton->isFlat()){
@@ -497,16 +495,27 @@ void MainWindow::filter(int cmyk)
     int h = ui->imageLabel->height();
 
     createGreyImage(*coloredImage, cmyk);
-    //createGreyPattern(matPattern, cmyk);      //filter not allowed before pattern loaded
 
     if(cmyk<4)
     {
-        QImage cmyFilteredImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-        cmyFilteredImg.save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
+        QImage filteredImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+        filteredImg.save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
         *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+
+        if(colored)
+        {
+            ui->imageLabel->setPixmap(QPixmap::fromImage(filteredImg).scaled(w,h,Qt::KeepAspectRatio));
+        }else{
+            createGreyImage(*coloredImage);
+            QImage greyImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+            //greyImg.save("/Users/resa/Studium/WiSe2013/Thesis/editedGreyImage.png", 0, 100);
+            //*greyImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+            ui->imageLabel->setPixmap(QPixmap::fromImage(greyImg).scaled(w,h,Qt::KeepAspectRatio));
+        }
+    }else{
+        QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+        ui->imageLabel->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
     }
-    QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-    ui->imageLabel->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
 }
 
 Mat MainWindow::qimage_to_mat_cpy(QImage const &img, int format)

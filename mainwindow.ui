@@ -42,7 +42,7 @@
      </size>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -59,7 +59,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>800</width>
+        <width>750</width>
         <height>500</height>
        </size>
       </property>
@@ -98,7 +98,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>800</width>
+        <width>750</width>
         <height>500</height>
        </size>
       </property>
@@ -244,32 +244,7 @@
         <widget class="QDial" name="dial"/>
        </item>
        <item>
-        <widget class="QLabel" name="sensitivityValueText">
-         <property name="minimumSize">
-          <size>
-           <width>60</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>35</height>
-          </size>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::Panel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Sunken</enum>
-         </property>
-         <property name="lineWidth">
-          <number>2</number>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
+        <widget class="QSpinBox" name="sensitivityValueText"/>
        </item>
        <item>
         <widget class="QPushButton" name="greyView">
@@ -300,13 +275,6 @@
         <widget class="QRadioButton" name="radioY">
          <property name="text">
           <string>Y</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioK">
-         <property name="text">
-          <string>black</string>
          </property>
         </widget>
        </item>

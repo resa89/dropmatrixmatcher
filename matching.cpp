@@ -26,6 +26,7 @@ int max_Trackbar = 5;
 
 void MainWindow::matchingWithMethod(int method, float sensitivity)
 {
+    this->setCursor(Qt::WaitCursor);
     match_method = method;
     float exitValue;
     int tabnumber;
@@ -84,6 +85,7 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
            test = result.at<float>(minLoc.y, minLoc.x);
         }
     }
+    this->unsetCursor();
     this->displayImageInImageLabel(img_display);
 }
 
@@ -189,6 +191,7 @@ void MainWindow::matchingWithCvMethod(int method, float sensitivity)
 {
     match_method = method;
     int tabnumber;
+    this->setCursor(Qt::WaitCursor);
     tabnumber = ui->tabWidget->currentIndex();
 
     /// Load image and template
@@ -250,5 +253,6 @@ void MainWindow::matchingWithCvMethod(int method, float sensitivity)
             }
         }
     }
+    this->unsetCursor();
     this->displayImageInImageLabel(img_display);
 }
