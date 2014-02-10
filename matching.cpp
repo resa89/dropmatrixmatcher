@@ -34,7 +34,8 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
     /// Load image and template
     if (tabnumber == 0)
     {
-        img = imread(this->imagePath.toStdString());
+        img = *coloredImage;
+        //img = imread(this->imagePath.toStdString());
     }
     else
     {
@@ -193,7 +194,8 @@ void MainWindow::matchingWithCvMethod(int method, float sensitivity)
     /// Load image and template
     if (tabnumber == 0)
     {
-        img = imread(this->imagePath.toStdString());
+        img = *coloredImage;
+        //img = imread(this->imagePath.toStdString());
     }
     else
     {
