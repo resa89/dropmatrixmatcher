@@ -36,7 +36,7 @@ private slots:
     void setImageBrightness(int value);
     void sensitivity(int value);
     void filterImage();
-    void useGreyPattern();
+    void useGreyView();
 
 
     void on_findButton0_clicked();
