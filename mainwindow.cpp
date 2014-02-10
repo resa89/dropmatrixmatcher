@@ -460,9 +460,13 @@ void MainWindow::filterImage()
 
         ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
         // und sag dass colred benutzt werden soll
-         this->ui->filterButton->setFlat(false);
+        this->ui->filterButton->setFlat(false);
+        this->ui->contrastSlider_2->setDisabled(false);
+        this->ui->brightnessSlider_2->setDisabled(false);
     }else{
          this->ui->filterButton->setFlat(true);
+        this->ui->contrastSlider_2->setDisabled(true);
+        this->ui->brightnessSlider_2->setDisabled(true);
     }
 }
 
