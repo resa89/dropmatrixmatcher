@@ -8,6 +8,8 @@
 //#include <QDir>
 //#include <iostream>
 //#include <stdio.h>
+#include <fstream>
+
 
 using namespace std;
 using namespace cv;
@@ -56,6 +58,22 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
 
     /// Do the Matching and Normalize
     result = match(method);
+
+   //------ TEST FOR EXCEL EXPORT --------
+
+    ofstream myfile;
+    myfile.open ("/Users/resa/Studium/WiSe2013/Thesis/example.txt");
+    for (int r=0; r<result_rows; r++)
+    {
+        for (int c=0; c<result_cols; c++)
+        {
+            myfile << result.at<float>(r,c) << ",";
+        }
+        myfile << endl;
+    }
+    myfile.close();
+
+    //------ TEST FOR EXCEL EXPORT --------
 
     /// Localizing the best match with minMaxLoc
     double minVal; double maxVal; Point minLoc; Point maxLoc;
