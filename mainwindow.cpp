@@ -2,7 +2,6 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include "opencv2/imgproc/types_c.h"
 
 #include <QFileDialog>
 #include <QStringList>
@@ -10,8 +9,6 @@
 #include <QDir>
 #include <iostream>
 #include <stdio.h>
-//#include <math.h>
-
 
 using namespace std;
 using namespace cv;
@@ -136,7 +133,7 @@ void MainWindow::on_loadPattern_clicked()
     int h = ui->patternLabel->height();
 
     pattern->load(fileName);
-    patternPath = fileName;                          //ACHTUNG! Pointer auf Speicher
+    patternPath = fileName;
 
     pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
     *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
@@ -307,12 +304,11 @@ void MainWindow::setBrightness(int value)
 {
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
-    /// Read pattern
+
     Mat matImage = imread(this->patternPath.toStdString());
     Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
     float contrast = (float)(this->ui->contrastSlider->value())/100;
 
-    /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
     for( int y = 0; y < matImage.rows; y++ )
     {
         for( int x = 0; x < matImage.cols; x++ )
@@ -344,7 +340,6 @@ void MainWindow::setContrast(int value)
     float contrast = (float)value/100;
     int brightness = this->ui->brightnessSlider->value();
 
-    /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
     for( int y = 0; y < matImage.rows; y++ )
     {
         for( int x = 0; x < matImage.cols; x++ )
@@ -373,7 +368,6 @@ void MainWindow::setImageBrightness(int value)
     Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
     float contrast = (float)(this->ui->contrastSlider_2->value())/100;
 
-    /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
     for( int y = 0; y < matImage.rows; y++ )
     {
         for( int x = 0; x < matImage.cols; x++ )
@@ -407,7 +401,6 @@ void MainWindow::setImageContrast(int value)
     float contrast = (float)value/100;
     int brightness = this->ui->brightnessSlider_2->value();
 
-    /// Do the operation new_image(i,j) = alpha*image(i,j) + beta
     for( int y = 0; y < matImage.rows; y++ )
     {
         for( int x = 0; x < matImage.cols; x++ )
@@ -452,7 +445,6 @@ void MainWindow::filterImage()
     if (this->ui->filterButton->isFlat()){
         int w = ui->imageLabel->width();
         int h = ui->imageLabel->height();
-        //image show colored
 
         image->save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
         *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
@@ -475,16 +467,14 @@ void MainWindow::useGreyView()
     if (!colored){
         int w = ui->imageLabel->width();
         int h = ui->imageLabel->height();
-        //aktive image show colored
-        //wie zuletzt gefiltert oder bearbeitet (also extra auf dem system abspeichern)
+
         QImage editedImg;
         editedImg.load("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
         ui->imageLabel->setPixmap(QPixmap::fromImage(editedImg).scaled(w,h,Qt::KeepAspectRatio));
-        // und sag dass colored benutzt werden soll
         colored = true;
         this->ui->greyView->setFlat(false);
     }else{
-        this->filter(4);    //im filter muss aktuelles colored Mat gefiltert werden
+        this->filter(4);
         this->ui->greyView->setFlat(true);
         colored = false;
     }
@@ -492,9 +482,6 @@ void MainWindow::useGreyView()
 
 void MainWindow::filter(int cmyk)
 {
-    //Mat matImage = imread(this->imagePath.toStdString());
-    //Mat matPattern = imread(this->patternPath.toStdString());
-
     int w = ui->imageLabel->width();
     int h = ui->imageLabel->height();
 

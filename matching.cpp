@@ -1,14 +1,8 @@
 #include <QtGui>
+#include <fstream>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
-//#include <QStringList>
-//#include <QFile>
-//#include <QDir>
-//#include <iostream>
-//#include <stdio.h>
-#include <fstream>
 
 
 using namespace std;
@@ -22,9 +16,6 @@ char* result_window = "Result window";
 
 int match_method;
 int max_Trackbar = 5;
-
-/// Function Headers
-//void MatchingMethod( int, void* );
 
 void MainWindow::matchingWithMethod(int method, float sensitivity)
 {
@@ -59,7 +50,7 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
     /// Do the Matching and Normalize
     result = match(method);
 
-   //------ TEST FOR EXCEL EXPORT --------
+   //------ export result data to view data --------
 
     ofstream myfile;
     myfile.open ("/Users/resa/Studium/WiSe2013/Thesis/example.txt");
@@ -73,7 +64,7 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
     }
     myfile.close();
 
-    //------ TEST FOR EXCEL EXPORT --------
+    //------ export result data to view data --------
 
     /// Localizing the best match with minMaxLoc
     double minVal; double maxVal; Point minLoc; Point maxLoc;
