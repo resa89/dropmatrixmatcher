@@ -99,6 +99,12 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(filterImage()));
     connect(ui->greyView, SIGNAL(clicked(bool)),
             this, SLOT(useGreyView()));
+
+    bool folderAlreadyExists = QDir("DropMatrixMatcherData").exists();
+    if(!folderAlreadyExists)
+    {
+        QDir().mkdir("DropMatrixMatcherData");
+    }
 }
 
 
@@ -128,15 +134,15 @@ void MainWindow::on_loadPattern_clicked()
     Mat matPattern;
 
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
+        tr("Open Image"), "./..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
 
     pattern->load(fileName);
     patternPath = fileName;
 
-    pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
-    *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
+    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
     createGreyPattern(*coloredPattern);
 
     //matPattern = imread(this->patternPath.toStdString());
@@ -155,7 +161,7 @@ void MainWindow::on_loadImage_clicked()
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "/Users/resa/Studium/WiSe2013/Thesis", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
+        tr("Open Image"), "./..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
 
     ///check active tab
     if(tabnumber == 0 )
@@ -164,8 +170,8 @@ void MainWindow::on_loadImage_clicked()
         image->load(fileName);
         imagePath = fileName;
 
-        image->save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
-        *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+        image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
         createGreyImage(*coloredImage);
 
         int w = ui->imageLabel->width();
@@ -205,7 +211,7 @@ void MainWindow::displayImageInImageLabel(Mat mat)
 
         QImage imageToShow = QImage((unsigned char*) mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
         imageToShow = imageToShow.rgbSwapped();
-        imageToShow.save("/Users/resa/Studium/WiSe2013/Thesis/imageToShow.png", 0, 100);
+        imageToShow.save("./DropMatrixMatcherData/imageToShow.png", 0, 100);
         pixmap = QPixmap::fromImage(imageToShow);
         ui->imageLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
     }
@@ -272,7 +278,7 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
     QImage currentImage;
-    currentImage.load("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+    currentImage.load("./DropMatrixMatcherData/editedImage.png");
     int imagewidth = currentImage.width();
     int imageheight = currentImage.height();
     int pixmapwidth = ui->imageLabel->pixmap()->width();
@@ -281,7 +287,7 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     float widthFactor = (float)imagewidth/(float)pixmapwidth;
     float heightFactor = (float)imageheight/(float)pixmapheight;
 
-    QString fileName = "/Users/resa/Studium/WiSe2013/Thesis/pattern01.png";         //Ort muss einstellbar sein, evt. globale Variable
+    QString fileName = "./DropMatrixMatcherData/pattern01.png";         //Ort muss einstellbar sein, evt. globale Variable
 
     selectRect = ui->imageLabel->getQImageRect(widthFactor, heightFactor);
 
@@ -290,8 +296,8 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     pattern->save(fileName, 0, 100);        //muss aufgehellt werden
     patternPath = fileName;
 
-    pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
-    *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
+    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
     createGreyPattern(*coloredPattern);
     //Mat matPattern = imread(this->patternPath.toStdString());
     //createGreyPattern(matPattern);
@@ -322,8 +328,8 @@ void MainWindow::setBrightness(int value)
 
    *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
     *pattern = pattern->rgbSwapped();
-    pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
-    *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
+    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
     createGreyPattern(*coloredPattern);
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
 
@@ -353,8 +359,8 @@ void MainWindow::setContrast(int value)
 
     *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
     *pattern = pattern->rgbSwapped();
-    pattern->save("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png", 0, 100);
-    *coloredPattern = imread("/Users/resa/Studium/WiSe2013/Thesis/editedPattern.png");
+    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
     createGreyPattern(*coloredPattern);
 
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
@@ -382,8 +388,8 @@ void MainWindow::setImageBrightness(int value)
    *image = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
     *image = image->rgbSwapped();
 
-    image->save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
-    *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
     createGreyImage(*coloredImage);
 
     ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
@@ -415,8 +421,8 @@ void MainWindow::setImageContrast(int value)
     *image = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
     *image = image->rgbSwapped();
 
-    image->save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
-    *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
     createGreyImage(*coloredImage);
 
     ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
@@ -446,8 +452,8 @@ void MainWindow::filterImage()
         int w = ui->imageLabel->width();
         int h = ui->imageLabel->height();
 
-        image->save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
-        *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+        image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
         createGreyImage(*coloredImage);
 
         ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
@@ -469,7 +475,7 @@ void MainWindow::useGreyView()
         int h = ui->imageLabel->height();
 
         QImage editedImg;
-        editedImg.load("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+        editedImg.load("./DropMatrixMatcherData/editedImage.png");
         ui->imageLabel->setPixmap(QPixmap::fromImage(editedImg).scaled(w,h,Qt::KeepAspectRatio));
         colored = true;
         this->ui->greyView->setFlat(false);
@@ -490,8 +496,8 @@ void MainWindow::filter(int cmyk)
     if(cmyk<4)
     {
         QImage filteredImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-        filteredImg.save("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png", 0, 100);
-        *coloredImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+        filteredImg.save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
 
         if(colored)
         {
@@ -499,8 +505,8 @@ void MainWindow::filter(int cmyk)
         }else{
             createGreyImage(*coloredImage);
             QImage greyImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-            //greyImg.save("/Users/resa/Studium/WiSe2013/Thesis/editedGreyImage.png", 0, 100);
-            //*greyImage = imread("/Users/resa/Studium/WiSe2013/Thesis/editedImage.png");
+            //greyImg.save("./DropMatrixMatcherData/editedGreyImage.png", 0, 100);
+            //*greyImage = imread("./DropMatrixMatcherData/editedImage.png");
             ui->imageLabel->setPixmap(QPixmap::fromImage(greyImg).scaled(w,h,Qt::KeepAspectRatio));
         }
     }else{

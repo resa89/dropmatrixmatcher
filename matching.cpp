@@ -53,7 +53,7 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
    //------ export result data to view data --------
 
     ofstream myfile;
-    myfile.open ("/Users/resa/Studium/WiSe2013/Thesis/example.txt");
+    myfile.open ("./DropMatrixMatcherData/resultData.txt");
     for (int r=0; r<result_rows; r++)
     {
         for (int c=0; c<result_cols; c++)
