@@ -24,17 +24,7 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
     float exitValue;
     int tabnumber;
     tabnumber = ui->tabWidget->currentIndex();
-
-    /// Load image and template
-    if (tabnumber == 0)
-    {
-        img = *coloredImage;
-        //img = imread(this->imagePath.toStdString());
-    }
-    else
-    {
-        img = imread(this->imagePath_2.toStdString());
-    }
+    img = *coloredImage;
 
     templ = imread(this->patternPath.toStdString());
 
@@ -203,16 +193,7 @@ void MainWindow::matchingWithCvMethod(int method, float sensitivity)
     this->setCursor(Qt::WaitCursor);
     tabnumber = ui->tabWidget->currentIndex();
 
-    /// Load image and template
-    if (tabnumber == 0)
-    {
-        img = *coloredImage;
-        //img = imread(this->imagePath.toStdString());
-    }
-    else
-    {
-        img = imread(this->imagePath_2.toStdString());
-    }
+    img = *coloredImage;
 
     templ = *coloredPattern;
 

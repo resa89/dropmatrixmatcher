@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     image = new QImage;
+    image_1 = new QImage;
     image_2 = new QImage;
     greyImage = new Mat;
     coloredPattern = new Mat;
@@ -28,15 +29,21 @@ MainWindow::MainWindow(QWidget *parent) :
     greyPattern = new Mat;
     greyToScreen = new Mat;
     colored = true;
+    imagePath = new QString;
+    myLabel = new ProLabel;
 
     ui->setupUi(this);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
-    ui->imageLabel->setPixmap(QPixmap::fromImage(*image));
+    ui->imageLabel_1->setPixmap(QPixmap::fromImage(*image));
     ui->imageLabel_2->setPixmap(QPixmap::fromImage(*image_2));
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern));
     ui->dial->setRange(0,100);
     ui->tabWidget->setCurrentIndex(0);
+
+    this->image = this->image_1;
+    this->imagePath = &this->imagePath_1;
+    this->myLabel = this->ui->imageLabel_1;
 
     ui->findButton0->setDefault(true);
     ui->findButton0->setEnabled(false);
@@ -69,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->sensitivityValueText->setMaximum(100);
     ui->sensitivityValueText->setValue(0);
 
+
     // Only if images are uploaded, find button is enabled
     connect(ui->loadImage, SIGNAL(clicked()),
             this, SLOT(enableFindButtons()));
@@ -100,6 +108,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->greyView, SIGNAL(clicked(bool)),
             this, SLOT(useGreyView()));
 
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(tabChanged(int)));
+
     bool folderAlreadyExists = QDir("DropMatrixMatcherData").exists();
     if(!folderAlreadyExists)
     {
@@ -125,6 +136,23 @@ void MainWindow::enableFindButtons()
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::tabChanged(int tab)
+{
+    if(tab == 0)
+    {
+        this->image = this->image_1;
+        this->imagePath = &(this->imagePath_1);
+        this->myLabel = this->ui->imageLabel_1;
+    }
+    else{
+        this->image = this->image_2;
+        this->imagePath = &(this->imagePath_2);
+        this->myLabel = this->ui->imageLabel_2;
+    }
+
+
 }
 
 void MainWindow::on_loadPattern_clicked()
@@ -155,76 +183,43 @@ void MainWindow::on_loadPattern_clicked()
 
 void MainWindow::on_loadImage_clicked()
 {
-    int tabnumber;
-    tabnumber = ui->tabWidget->currentIndex();
-
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
         tr("Open Image"), "./..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
 
-    ///check active tab
-    if(tabnumber == 0 )
-    {
-        Mat matImage;
-        image->load(fileName);
-        imagePath = fileName;
+    Mat matImage;
+    image->load(fileName);
+    *imagePath = fileName;
 
-        image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
-        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
-        createGreyImage(*coloredImage);
+    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+    createGreyImage(*coloredImage);
 
-        int w = ui->imageLabel->width();
-        int h = ui->imageLabel->height();
+    int w = myLabel->width();
+    int h = myLabel->height();
 
-        ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
-    }
-    else
-    {
-        image_2->load(fileName);
-        //*image_2 = image_2->convertToFormat(QImage::Format_RGB888);
+    myLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
 
-        imagePath_2 = fileName;
-        int w = ui->imageLabel_2->width();
-        int h = ui->imageLabel_2->height();
-        ui->imageLabel_2->setPixmap(QPixmap::fromImage(*image_2).scaled(w,h,Qt::KeepAspectRatio));
-    }
     ui->brightnessSlider_2->setSliderPosition(0);
     ui->contrastSlider_2->setSliderPosition(100);
 }
 
 void MainWindow::displayImageInImageLabel(Mat mat)
 {
-    int tabnumber;
-    tabnumber = ui->tabWidget->currentIndex();
-
     QPixmap pixmap;
 
-    ///check active tab
-    if(tabnumber == 0)
-    {
-        int w = ui->imageLabel->width();
-        int h = ui->imageLabel->height();
-        //QImage::Format imageFormat = this->image->format();
+    int w = myLabel->width();
+    int h = myLabel->height();
+    //QImage::Format imageFormat = this->image->format();
 
-        //mat.depthMat(image->height(),image->width(),CV_8UC4,(uchar*)image->bits(),image->bytesPerLine());
+    //mat.depthMat(image->height(),image->width(),CV_8UC4,(uchar*)image->bits(),image->bytesPerLine());
 
-        QImage imageToShow = QImage((unsigned char*) mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
-        imageToShow = imageToShow.rgbSwapped();
-        imageToShow.save("./DropMatrixMatcherData/imageToShow.png", 0, 100);
-        pixmap = QPixmap::fromImage(imageToShow);
-        ui->imageLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
-    }
-    else
-    {
-        int w = ui->imageLabel_2->width();
-        int h = ui->imageLabel_2->height();
-        QImage::Format imageFormat = this->image->format();
-
-        pixmap = QPixmap::fromImage(QImage((unsigned char*) mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB888));
-
-        ui->imageLabel_2->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
-    }
+    QImage imageToShow = QImage((unsigned char*) mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
+    imageToShow = imageToShow.rgbSwapped();
+    imageToShow.save("./DropMatrixMatcherData/imageToShow.png", 0, 100);
+    pixmap = QPixmap::fromImage(imageToShow);
+    myLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
 }
 
 
@@ -281,15 +276,15 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     currentImage.load("./DropMatrixMatcherData/editedImage.png");
     int imagewidth = currentImage.width();
     int imageheight = currentImage.height();
-    int pixmapwidth = ui->imageLabel->pixmap()->width();
-    int pixmapheight = ui->imageLabel->pixmap()->height();
+    int pixmapwidth = myLabel->pixmap()->width();
+    int pixmapheight = myLabel->pixmap()->height();
 
     float widthFactor = (float)imagewidth/(float)pixmapwidth;
     float heightFactor = (float)imageheight/(float)pixmapheight;
 
     QString fileName = "./DropMatrixMatcherData/pattern01.png";         //Ort muss einstellbar sein, evt. globale Variable
 
-    selectRect = ui->imageLabel->getQImageRect(widthFactor, heightFactor);
+    selectRect = myLabel->getQImageRect(widthFactor, heightFactor);
 
     *pattern = currentImage.copy(selectRect);
 
@@ -367,10 +362,10 @@ void MainWindow::setContrast(int value)
 }
 void MainWindow::setImageBrightness(int value)
 {
-    int w = ui->imageLabel->width();
-    int h = ui->imageLabel->height();
+    int w = myLabel->width();
+    int h = myLabel->height();
     /// Read pattern
-    Mat matImage = imread(this->imagePath.toStdString());
+    Mat matImage = imread(this->imagePath->toStdString());
     Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
     float contrast = (float)(this->ui->contrastSlider_2->value())/100;
 
@@ -392,16 +387,16 @@ void MainWindow::setImageBrightness(int value)
     *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
     createGreyImage(*coloredImage);
 
-    ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
+    myLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
 
 }
 
 void MainWindow::setImageContrast(int value)
 {
-    int w = ui->imageLabel->width();
-    int h = ui->imageLabel->height();
+    int w = myLabel->width();
+    int h = myLabel->height();
     /// Read pattern
-    Mat matImage = imread(this->imagePath.toStdString());
+    Mat matImage = imread(this->imagePath->toStdString());
     Mat new_image = Mat::zeros( matImage.size(), matImage.type() );
 
     float contrast = (float)value/100;
@@ -425,7 +420,7 @@ void MainWindow::setImageContrast(int value)
     *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
     createGreyImage(*coloredImage);
 
-    ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
+    myLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
 }
 
 void MainWindow::sensitivity(int value)
@@ -449,14 +444,14 @@ void MainWindow::filterImage()
     }
 
     if (this->ui->filterButton->isFlat()){
-        int w = ui->imageLabel->width();
-        int h = ui->imageLabel->height();
+        int w = myLabel->width();
+        int h = myLabel->height();
 
         image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
         *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
         createGreyImage(*coloredImage);
 
-        ui->imageLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
+        myLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
         // und sag dass colred benutzt werden soll
         this->ui->filterButton->setFlat(false);
         this->ui->contrastSlider_2->setDisabled(false);
@@ -471,12 +466,12 @@ void MainWindow::filterImage()
 void MainWindow::useGreyView()
 {
     if (!colored){
-        int w = ui->imageLabel->width();
-        int h = ui->imageLabel->height();
+        int w = myLabel->width();
+        int h = myLabel->height();
 
         QImage editedImg;
         editedImg.load("./DropMatrixMatcherData/editedImage.png");
-        ui->imageLabel->setPixmap(QPixmap::fromImage(editedImg).scaled(w,h,Qt::KeepAspectRatio));
+        myLabel->setPixmap(QPixmap::fromImage(editedImg).scaled(w,h,Qt::KeepAspectRatio));
         colored = true;
         this->ui->greyView->setFlat(false);
     }else{
@@ -488,8 +483,8 @@ void MainWindow::useGreyView()
 
 void MainWindow::filter(int cmyk)
 {
-    int w = ui->imageLabel->width();
-    int h = ui->imageLabel->height();
+    int w = myLabel->width();
+    int h = myLabel->height();
 
     createGreyImage(*coloredImage, cmyk);
 
@@ -501,17 +496,17 @@ void MainWindow::filter(int cmyk)
 
         if(colored)
         {
-            ui->imageLabel->setPixmap(QPixmap::fromImage(filteredImg).scaled(w,h,Qt::KeepAspectRatio));
+            myLabel->setPixmap(QPixmap::fromImage(filteredImg).scaled(w,h,Qt::KeepAspectRatio));
         }else{
             createGreyImage(*coloredImage);
             QImage greyImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
             //greyImg.save("./DropMatrixMatcherData/editedGreyImage.png", 0, 100);
             //*greyImage = imread("./DropMatrixMatcherData/editedImage.png");
-            ui->imageLabel->setPixmap(QPixmap::fromImage(greyImg).scaled(w,h,Qt::KeepAspectRatio));
+            myLabel->setPixmap(QPixmap::fromImage(greyImg).scaled(w,h,Qt::KeepAspectRatio));
         }
     }else{
         QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
-        ui->imageLabel->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
+        myLabel->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
     }
 }
 

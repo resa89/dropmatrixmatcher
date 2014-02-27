@@ -12,6 +12,7 @@ class QLabel;
 class QPushButton;
 class QLayout;
 class QRect;
+class ProLabel;
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +38,7 @@ private slots:
     void sensitivity(int value);
     void filterImage();
     void useGreyView();
+    void tabChanged(int tab);
 
 
     void on_findButton0_clicked();
@@ -57,17 +59,21 @@ private:
     cv::Mat *greyPattern;
     cv::Mat *coloredPattern;
     QImage *image;
+    QImage *image_1;
     QImage *image_2;
     cv::Mat *greyImage;
     cv::Mat *coloredImage;
     cv::Mat *greyToScreen;
     QString patternPath;
-    QString imagePath;
+    QString *imagePath;
+    QString imagePath_1;
     QString imagePath_2;
     QRect selectRect;
     double greyPatternPixelSum;
     double greyPatternPixelSumPow;
     bool colored;
+    ProLabel *myLabel;
+
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method, float sensitivity);
