@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->image = this->image_1;
     this->imagePath = &this->imagePath_1;
     this->myLabel = this->ui->imageLabel_1;
+    this->setWindowTitle("Drop Matrix Matcher");
+    this->setWindowIcon(QIcon("matcher.icns"));
 
     ui->findButton0->setDefault(true);
     ui->findButton0->setEnabled(false);
@@ -145,11 +147,13 @@ void MainWindow::tabChanged(int tab)
         this->image = this->image_1;
         this->imagePath = &(this->imagePath_1);
         this->myLabel = this->ui->imageLabel_1;
+        ui->LoadSelectedPattern->setEnabled(true);
     }
     else{
         this->image = this->image_2;
         this->imagePath = &(this->imagePath_2);
         this->myLabel = this->ui->imageLabel_2;
+        ui->LoadSelectedPattern->setEnabled(false);
     }
 
 

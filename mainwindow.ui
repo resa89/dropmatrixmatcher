@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1305</width>
+    <width>1253</width>
     <height>706</height>
    </rect>
   </property>
@@ -31,13 +31,13 @@
      <rect>
       <x>400</x>
       <y>10</y>
-      <width>900</width>
+      <width>840</width>
       <height>621</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
-      <width>900</width>
+      <width>800</width>
       <height>400</height>
      </size>
     </property>
@@ -53,7 +53,7 @@
        <rect>
         <x>-1</x>
         <y>0</y>
-        <width>881</width>
+        <width>831</width>
         <height>591</height>
        </rect>
       </property>
@@ -92,7 +92,7 @@
        <rect>
         <x>-1</x>
         <y>0</y>
-        <width>881</width>
+        <width>831</width>
         <height>591</height>
        </rect>
       </property>
@@ -128,8 +128,8 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>396</width>
-      <height>660</height>
+      <width>381</width>
+      <height>611</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -137,8 +137,8 @@
       <widget class="QLabel" name="patternLabel">
        <property name="minimumSize">
         <size>
-         <width>200</width>
-         <height>200</height>
+         <width>150</width>
+         <height>100</height>
         </size>
        </property>
        <property name="autoFillBackground">
@@ -233,6 +233,9 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
@@ -250,6 +253,9 @@
         <widget class="QPushButton" name="greyView">
          <property name="text">
           <string>grey View</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -436,7 +442,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1305</width>
+     <width>1253</width>
      <height>22</height>
     </rect>
    </property>

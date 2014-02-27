@@ -74,7 +74,6 @@ private:
     bool colored;
     ProLabel *myLabel;
 
-
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method, float sensitivity);
     void matchingWithCvMethod(int method, float sensitivity);

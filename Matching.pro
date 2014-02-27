@@ -25,3 +25,5 @@ HEADERS  += mainwindow.h \
 LIBS += -lm -lopencv_core -lopencv_highgui -lopencv_video -lopencv_imgproc
 
 FORMS    += mainwindow.ui
+
+ICON = matcher.icns
