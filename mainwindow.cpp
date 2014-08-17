@@ -13,6 +13,7 @@
 using namespace std;
 using namespace cv;
 
+
 float sensitivityRange = 0;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -147,12 +148,20 @@ void MainWindow::tabChanged(int tab)
         this->image = this->image_1;
         this->imagePath = &(this->imagePath_1);
         this->myLabel = this->ui->imageLabel_1;
+        //use correct image
+        this->image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+        createGreyImage(*coloredImage);
         ui->LoadSelectedPattern->setEnabled(true);
     }
     else{
         this->image = this->image_2;
         this->imagePath = &(this->imagePath_2);
         this->myLabel = this->ui->imageLabel_2;
+        //use correct image
+        this->image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+        createGreyImage(*coloredImage);
         ui->LoadSelectedPattern->setEnabled(false);
     }
 

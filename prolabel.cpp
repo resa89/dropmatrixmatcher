@@ -24,10 +24,10 @@ void ProLabel::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
     QLabel::paintEvent(e);
-    painter.setPen(QPen(QBrush(QColor(0,0,0,180)),1,Qt::DashLine));
-    painter.setBrush(QBrush(QColor(255,255,255,120)));
+    //painter.setPen(QPen(QBrush(QColor(0,0,0,180)),1,Qt::DashLine));
+    //painter.setBrush(QBrush(QColor(255,255,255,120)));
 
-    painter.drawRect(selectionRect);
+    //painter.drawRect(selectionRect);
 }
 
 void ProLabel::mousePressEvent(QMouseEvent *e)

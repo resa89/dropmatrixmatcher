@@ -6,6 +6,8 @@
 
 QT       += core gui
 
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Matching
@@ -13,7 +15,7 @@ TEMPLATE = app
 
 INCLUDEPATH = /usr/local/include
 
-SOURCES += main.cpp\
+SOURCES += main.cpp \
         mainwindow.cpp \
     prolabel.cpp \
     matching.cpp \
@@ -22,8 +24,13 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     prolabel.h
 
-LIBS += -lm -lopencv_core -lopencv_highgui -lopencv_video -lopencv_imgproc
+LIBS += -L/usr/local/lib \
+    -lopencv_core \
+    -lopencv_highgui \
+    -lopencv_video \
+    -lopencv_imgproc
 
 FORMS    += mainwindow.ui
 
 ICON = matcher.icns
+
