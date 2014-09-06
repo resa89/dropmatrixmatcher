@@ -149,9 +149,11 @@ void MainWindow::tabChanged(int tab)
         this->imagePath = &(this->imagePath_1);
         this->myLabel = this->ui->imageLabel_1;
         //use correct image
-        this->image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
-        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
-        createGreyImage(*coloredImage);
+        createAllImages(true);
+//        this->image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+//        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+//        createGreyImage(*coloredImage);
+        // it's only possible to select a pattern out of the image in tab 1
         ui->LoadSelectedPattern->setEnabled(true);
     }
     else{
@@ -159,9 +161,11 @@ void MainWindow::tabChanged(int tab)
         this->imagePath = &(this->imagePath_2);
         this->myLabel = this->ui->imageLabel_2;
         //use correct image
-        this->image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
-        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
-        createGreyImage(*coloredImage);
+        createAllImages(true);
+//        this->image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+//        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+//        createGreyImage(*coloredImage);
+        // it's only possible to select a pattern out of the image in tab 1
         ui->LoadSelectedPattern->setEnabled(false);
     }
 
@@ -182,9 +186,10 @@ void MainWindow::on_loadPattern_clicked()
     pattern->load(fileName);
     patternPath = fileName;
 
-    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
-    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
-    createGreyPattern(*coloredPattern);
+    createAllImages(false);
+//    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+//    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
+//    createGreyPattern(*coloredPattern);
 
     //matPattern = imread(this->patternPath.toStdString());
     //createGreyPattern(matPattern);
@@ -205,9 +210,10 @@ void MainWindow::on_loadImage_clicked()
     image->load(fileName);
     *imagePath = fileName;
 
-    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
-    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
-    createGreyImage(*coloredImage);
+    createAllImages(true);
+//    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+//    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+//    createGreyImage(*coloredImage);
 
     int w = myLabel->width();
     int h = myLabel->height();
@@ -304,9 +310,11 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     pattern->save(fileName, 0, 100);        //muss aufgehellt werden
     patternPath = fileName;
 
-    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
-    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
-    createGreyPattern(*coloredPattern);
+    createAllImages(false);
+//    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+//    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
+//    createGreyPattern(*coloredPattern);
+
     //Mat matPattern = imread(this->patternPath.toStdString());
     //createGreyPattern(matPattern);
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
@@ -336,9 +344,10 @@ void MainWindow::setBrightness(int value)
 
    *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
     *pattern = pattern->rgbSwapped();
-    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
-    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
-    createGreyPattern(*coloredPattern);
+    createAllImages(false);
+//    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+//    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
+//    createGreyPattern(*coloredPattern);
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
 
 }
@@ -367,9 +376,10 @@ void MainWindow::setContrast(int value)
 
     *pattern = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
     *pattern = pattern->rgbSwapped();
-    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
-    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
-    createGreyPattern(*coloredPattern);
+    createAllImages(false);
+//    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+//    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
+//    createGreyPattern(*coloredPattern);
 
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
 }
@@ -396,9 +406,10 @@ void MainWindow::setImageBrightness(int value)
    *image = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
     *image = image->rgbSwapped();
 
-    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
-    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
-    createGreyImage(*coloredImage);
+    createAllImages(true);
+//    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+//    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+//    createGreyImage(*coloredImage);
 
     myLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
 
@@ -429,9 +440,10 @@ void MainWindow::setImageContrast(int value)
     *image = QImage((unsigned char*) new_image.data, new_image.cols, new_image.rows, new_image.step, QImage::Format_RGB888);
     *image = image->rgbSwapped();
 
-    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
-    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
-    createGreyImage(*coloredImage);
+    createAllImages(true);
+//    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+//    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+//    createGreyImage(*coloredImage);
 
     myLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
 }
@@ -457,18 +469,30 @@ void MainWindow::filterImage()
     }
 
     if (this->ui->filterButton->isFlat()){
+//        if(!colored){
+//            QImage originalColoredImg;
+//            originalColoredImg.load(this->imagePath->toStdString());
+//            createGreyImage(originalColoredImg);
+//            QImage greyImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+//            //greyImg.save("./DropMatrixMatcherData/editedGreyImage.png", 0, 100);
+//            //*greyImage = imread("./DropMatrixMatcherData/editedImage.png");
+//            *image = greyImg;
+//        }
         int w = myLabel->width();
         int h = myLabel->height();
 
-        image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
-        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
-        createGreyImage(*coloredImage);
+        createAllImages(true);
+//        image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+//        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+//        createGreyImage(*coloredImage);
 
         myLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
-        // und sag dass colred benutzt werden soll
+        // und sag dass colored benutzt werden soll
         this->ui->filterButton->setFlat(false);
         this->ui->contrastSlider_2->setDisabled(false);
         this->ui->brightnessSlider_2->setDisabled(false);
+
+
     }else{
          this->ui->filterButton->setFlat(true);
         this->ui->contrastSlider_2->setDisabled(true);
@@ -533,4 +557,17 @@ Mat MainWindow::qimage_to_mat_cpy(QImage const &img, int format)
     //return Mat(img.height(), img.width(), format, img.bits(), img.bytesPerLine()).clone();
     //return Mat(img.height(), img.width(), format, const_cast<uchar*>(img.bits()), img.bytesPerLine()).clone();
     //return Mat(img.height(),img.width(),CV_8UC3,img.byteCount());
+}
+
+void MainWindow::createAllImages(bool image)                        //image: true / pattern: false
+{
+    if (image){
+        this->image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+        createGreyImage(*coloredImage);
+    }else{
+        this->pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
+        *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
+        createGreyPattern(*coloredPattern);
+    }
 }

@@ -11,8 +11,8 @@ using namespace cv;
 /// Global Variables
 Mat img; Mat templ; Mat result; Mat img_display;
 
-char* image_window = "Source Image";
-char* result_window = "Result window";
+//char* image_window = "Source Image";
+//char* result_window = "Result window";
 
 int match_method;
 int max_Trackbar = 5;
@@ -20,7 +20,7 @@ int max_Trackbar = 5;
 void MainWindow::matchingWithMethod(int method, float sensitivity)
 {
     this->setCursor(Qt::WaitCursor);
-    match_method = method;
+    //match_method = method;
     float exitValue;
     int tabnumber;
     tabnumber = ui->tabWidget->currentIndex();
@@ -40,26 +40,27 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
     /// Do the Matching and Normalize
     result = match(method);
 
-   //------ export result data to view data --------
+//    //------ export result data to view the data -------
 
-    ofstream myfile;
-    myfile.open ("./DropMatrixMatcherData/resultData.txt");
-    for (int r=0; r<result_rows; r++)
-    {
-        for (int c=0; c<result_cols; c++)
-        {
-            myfile << result.at<float>(r,c) << ",";
-        }
-        myfile << endl;
-    }
-    myfile.close();
+//    ofstream myfile;
+//    myfile.open ("./DropMatrixMatcherData/resultData.txt");
+//    for (int r=0; r<result_rows; r++)
+//    {
+//        for (int c=0; c<result_cols; c++)
+//        {
+//            myfile << result.at<float>(r,c) << ",";
+//        }
+//        myfile << endl;
+//    }
+//    myfile.close();
 
-    //------ export result data to view data --------
+//    //------ export result data to view the data - END ----
 
     /// Localizing the best match with minMaxLoc
     double minVal; double maxVal; Point minLoc; Point maxLoc;
     Point matchLoc;
 
+    // maximum 50 result rectangles
     for( int i=0; i<50; i++ ){
 
         minMax(result, &minLoc, &maxLoc, &minVal, &maxVal);

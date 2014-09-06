@@ -87,6 +87,8 @@ private:
     void minMax(cv::Mat matResult, cv::Point* min, cv::Point* max, double* minVal, double* maxVal);
     void filter(int cmyk);
     cv::Mat qimage_to_mat_cpy(QImage const &img, int format);
+    void createAllImages(bool image);               //image: true / pattern: false
+
 
 
 };
