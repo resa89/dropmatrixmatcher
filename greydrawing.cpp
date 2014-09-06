@@ -1,12 +1,12 @@
 #include <QtGui>
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "dropmatrixmatcher.h"
+#include "ui_dropmatrixmatcher.h"
 
 using namespace cv;
 
 
-void MainWindow::createGreyImage(Mat colorImage, int cmyk)
+void DropMatrixMatcher::createGreyImage(Mat colorImage, int cmyk)
 {
     int w = colorImage.cols;
     int h = colorImage.rows;
@@ -52,7 +52,7 @@ void MainWindow::createGreyImage(Mat colorImage, int cmyk)
     }
 }
 
-void MainWindow::createGreyPattern(Mat colorPattern, int cmyk)          //filter for pattern is not implemented yet
+void DropMatrixMatcher::createGreyPattern(Mat colorPattern, int cmyk)          //filter for pattern is not implemented yet
 {
     int w = colorPattern.cols;
     int h = colorPattern.rows;

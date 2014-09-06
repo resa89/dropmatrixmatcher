@@ -1,7 +1,7 @@
 #include <QtGui>
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "dropmatrixmatcher.h"
+#include "ui_dropmatrixmatcher.h"
 
 #include <QFileDialog>
 #include <QStringList>
@@ -16,9 +16,9 @@ using namespace cv;
 
 float sensitivityRange = 0;
 
-MainWindow::MainWindow(QWidget *parent) :
+DropMatrixMatcher::DropMatrixMatcher(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::DropMatrixMatcher)
 {
     image = new QImage;
     image_1 = new QImage;
@@ -122,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
-void MainWindow::enableFindButtons()
+void DropMatrixMatcher::enableFindButtons()
 {
     if (!image->isNull() && !pattern->isNull())
     {
@@ -136,12 +136,12 @@ void MainWindow::enableFindButtons()
     }
 }
 
-MainWindow::~MainWindow()
+DropMatrixMatcher::~DropMatrixMatcher()
 {
     delete ui;
 }
 
-void MainWindow::tabChanged(int tab)
+void DropMatrixMatcher::tabChanged(int tab)
 {
     if(tab == 0)
     {
@@ -172,7 +172,7 @@ void MainWindow::tabChanged(int tab)
 
 }
 
-void MainWindow::on_loadPattern_clicked()
+void DropMatrixMatcher::on_loadPattern_clicked()
 {
     QString fileName;
     QFileDialog dialog;
@@ -199,7 +199,7 @@ void MainWindow::on_loadPattern_clicked()
     ui->contrastSlider->setSliderPosition(100);
 }
 
-void MainWindow::on_loadImage_clicked()
+void DropMatrixMatcher::on_loadImage_clicked()
 {
     QString fileName;
     QFileDialog dialog;
@@ -224,7 +224,7 @@ void MainWindow::on_loadImage_clicked()
     ui->contrastSlider_2->setSliderPosition(100);
 }
 
-void MainWindow::displayImageInImageLabel(Mat mat)
+void DropMatrixMatcher::displayImageInImageLabel(Mat mat)
 {
     QPixmap pixmap;
 
@@ -242,52 +242,52 @@ void MainWindow::displayImageInImageLabel(Mat mat)
 }
 
 
-void MainWindow::on_findButton0_clicked()
+void DropMatrixMatcher::on_findButton0_clicked()
 {
     matchingWithCvMethod(0, sensitivityRange);
 }
 
-void MainWindow::on_findButton1_clicked()
+void DropMatrixMatcher::on_findButton1_clicked()
 {
     matchingWithCvMethod(1, sensitivityRange);
 }
 
-void MainWindow::on_findButton2_clicked()
+void DropMatrixMatcher::on_findButton2_clicked()
 {
     matchingWithCvMethod(2, sensitivityRange);
 }
 
-void MainWindow::on_findButton3_clicked()
+void DropMatrixMatcher::on_findButton3_clicked()
 {
     matchingWithCvMethod(3, sensitivityRange);
 }
 
-void MainWindow::on_findButton4_clicked()
+void DropMatrixMatcher::on_findButton4_clicked()
 {
     matchingWithCvMethod(4, sensitivityRange);
 }
 
-void MainWindow::on_findButton5_clicked()
+void DropMatrixMatcher::on_findButton5_clicked()
 {
     matchingWithCvMethod(5, sensitivityRange);
 }
 
-void MainWindow::on_findButton6_clicked()
+void DropMatrixMatcher::on_findButton6_clicked()
 {
     matchingWithMethod(6, sensitivityRange);
 }
 
-void MainWindow::on_findButton7_clicked()
+void DropMatrixMatcher::on_findButton7_clicked()
 {
     matchingWithMethod(7, sensitivityRange);
 }
 
-void MainWindow::on_findButton8_clicked()
+void DropMatrixMatcher::on_findButton8_clicked()
 {
     matchingWithMethod(8, sensitivityRange);
 }
 
-void MainWindow::on_LoadSelectedPattern_clicked()
+void DropMatrixMatcher::on_LoadSelectedPattern_clicked()
 {
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
@@ -322,7 +322,7 @@ void MainWindow::on_LoadSelectedPattern_clicked()
     ui->contrastSlider->setSliderPosition(100);
 }
 
-void MainWindow::setBrightness(int value)
+void DropMatrixMatcher::setBrightness(int value)
 {
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
@@ -352,7 +352,7 @@ void MainWindow::setBrightness(int value)
 
 }
 
-void MainWindow::setContrast(int value)
+void DropMatrixMatcher::setContrast(int value)
 {
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
@@ -383,7 +383,7 @@ void MainWindow::setContrast(int value)
 
     ui->patternLabel->setPixmap(QPixmap::fromImage(*pattern).scaled(w,h,Qt::KeepAspectRatio));
 }
-void MainWindow::setImageBrightness(int value)
+void DropMatrixMatcher::setImageBrightness(int value)
 {
     int w = myLabel->width();
     int h = myLabel->height();
@@ -415,7 +415,7 @@ void MainWindow::setImageBrightness(int value)
 
 }
 
-void MainWindow::setImageContrast(int value)
+void DropMatrixMatcher::setImageContrast(int value)
 {
     int w = myLabel->width();
     int h = myLabel->height();
@@ -448,12 +448,12 @@ void MainWindow::setImageContrast(int value)
     myLabel->setPixmap(QPixmap::fromImage(*image).scaled(w,h,Qt::KeepAspectRatio));
 }
 
-void MainWindow::sensitivity(int value)
+void DropMatrixMatcher::sensitivity(int value)
 {
     sensitivityRange = (float)value/100;
 }
 
-void MainWindow::filterImage()
+void DropMatrixMatcher::filterImage()
 {
     if(this->ui->radioC->isChecked())
     {
@@ -500,7 +500,7 @@ void MainWindow::filterImage()
     }
 }
 
-void MainWindow::useGreyView()
+void DropMatrixMatcher::useGreyView()
 {
     if (!colored){
         int w = myLabel->width();
@@ -518,7 +518,7 @@ void MainWindow::useGreyView()
     }
 }
 
-void MainWindow::filter(int cmyk)
+void DropMatrixMatcher::filter(int cmyk)
 {
     int w = myLabel->width();
     int h = myLabel->height();
@@ -547,7 +547,7 @@ void MainWindow::filter(int cmyk)
     }
 }
 
-Mat MainWindow::qimage_to_mat_cpy(QImage const &img, int format)
+Mat DropMatrixMatcher::qimage_to_mat_cpy(QImage const &img, int format)
 {
     Mat mat(img.height(), img.width(), format);
     for (int i=0;i<img.height();i++) {
@@ -559,7 +559,7 @@ Mat MainWindow::qimage_to_mat_cpy(QImage const &img, int format)
     //return Mat(img.height(),img.width(),CV_8UC3,img.byteCount());
 }
 
-void MainWindow::createAllImages(bool image)                        //image: true / pattern: false
+void DropMatrixMatcher::createAllImages(bool image)                        //image: true / pattern: false
 {
     if (image){
         this->image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);

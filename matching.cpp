@@ -1,8 +1,8 @@
 #include <QtGui>
 #include <fstream>
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "dropmatrixmatcher.h"
+#include "ui_dropmatrixmatcher.h"
 
 
 using namespace std;
@@ -17,7 +17,7 @@ Mat img; Mat templ; Mat result; Mat img_display;
 int match_method;
 int max_Trackbar = 5;
 
-void MainWindow::matchingWithMethod(int method, float sensitivity)
+void DropMatrixMatcher::matchingWithMethod(int method, float sensitivity)
 {
     this->setCursor(Qt::WaitCursor);
     //match_method = method;
@@ -89,7 +89,7 @@ void MainWindow::matchingWithMethod(int method, float sensitivity)
     this->displayImageInImageLabel(img_display);
 }
 
-Mat MainWindow::match(int method)
+Mat DropMatrixMatcher::match(int method)
 {
     int result_cols =  greyImage->cols - greyPattern->cols + 1;
     int result_rows = greyImage->rows - greyPattern->rows + 1;
@@ -108,7 +108,7 @@ Mat MainWindow::match(int method)
     return localResult;
 }
 
-float MainWindow::matchingAlgorithm(int x, int y, int method)
+float DropMatrixMatcher::matchingAlgorithm(int x, int y, int method)
 {
     float pixelResult = 0;
     double greyImagePixelSum = 0;
@@ -138,7 +138,7 @@ float MainWindow::matchingAlgorithm(int x, int y, int method)
     return pixelResult;
 }
 
-float MainWindow::tmpFunction( int x, int y, int method )
+float DropMatrixMatcher::tmpFunction( int x, int y, int method )
 {
     float result;
 
@@ -150,7 +150,7 @@ float MainWindow::tmpFunction( int x, int y, int method )
     return result;
 }
 
-float MainWindow::imgFunction( int x, int y, double greyImagePixelSum, int method )
+float DropMatrixMatcher::imgFunction( int x, int y, double greyImagePixelSum, int method )
 {
     float result;
 
@@ -162,7 +162,7 @@ float MainWindow::imgFunction( int x, int y, double greyImagePixelSum, int metho
     return result;
 }
 
-void MainWindow::minMax(Mat matResult, Point* min, Point* max, double* minVal, double* maxVal)
+void DropMatrixMatcher::minMax(Mat matResult, Point* min, Point* max, double* minVal, double* maxVal)
 {
     *minVal = matResult.at<float>(0,0);
     *maxVal = matResult.at<float>(0,0);
@@ -187,7 +187,7 @@ void MainWindow::minMax(Mat matResult, Point* min, Point* max, double* minVal, d
     }
 }
 
-void MainWindow::matchingWithCvMethod(int method, float sensitivity)
+void DropMatrixMatcher::matchingWithCvMethod(int method, float sensitivity)
 {
     match_method = method;
     int tabnumber;

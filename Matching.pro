@@ -16,13 +16,14 @@ TEMPLATE = app
 INCLUDEPATH = /usr/local/include
 
 SOURCES += main.cpp \
-        mainwindow.cpp \
     prolabel.cpp \
     matching.cpp \
-    greydrawing.cpp
+    greydrawing.cpp \
+    dropmatrixmatcher.cpp
 
-HEADERS  += mainwindow.h \
-    prolabel.h
+HEADERS  += \
+    prolabel.h \
+    dropmatrixmatcher.h
 
 LIBS += -L/usr/local/lib \
     -lopencv_core \
@@ -30,7 +31,8 @@ LIBS += -L/usr/local/lib \
     -lopencv_video \
     -lopencv_imgproc
 
-FORMS    += mainwindow.ui
+FORMS    += \
+    dropmatrixmatcher.ui
 
 ICON = matcher.icns
 

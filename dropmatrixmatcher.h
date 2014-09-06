@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DROPMATRIXMATCHER_H
+#define DROPMATRIXMATCHER_H
 
 #include <QMainWindow>
 #include <opencv/cv.h>
@@ -16,17 +16,17 @@ class QRect;
 class ProLabel;
 
 namespace Ui {
-class MainWindow;
+class DropMatrixMatcher;
 }
 
 
-class MainWindow : public QMainWindow
+class DropMatrixMatcher : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit DropMatrixMatcher(QWidget *parent = 0);
+    ~DropMatrixMatcher();
 
 private slots:
     void on_loadPattern_clicked();
@@ -55,7 +55,7 @@ private slots:
     void on_LoadSelectedPattern_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::DropMatrixMatcher *ui;
     QImage *pattern;
     cv::Mat *greyPattern;
     cv::Mat *coloredPattern;
@@ -93,4 +93,4 @@ private:
 
 };
 
-#endif // MAINWINDOW_H
+#endif // DROPMATRIXMATCHER_H
