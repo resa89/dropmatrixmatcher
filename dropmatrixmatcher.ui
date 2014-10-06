@@ -23,143 +23,41 @@
    <property name="minimumSize">
     <size>
      <width>1250</width>
-     <height>650</height>
+     <height>750</height>
     </size>
    </property>
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>10</y>
-      <width>840</width>
-      <height>621</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>800</width>
-      <height>400</height>
-     </size>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Tab 1</string>
-     </attribute>
-     <widget class="ProLabel" name="imageLabel_1">
-      <property name="geometry">
-       <rect>
-        <x>-1</x>
-        <y>0</y>
-        <width>831</width>
-        <height>591</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>750</width>
-        <height>500</height>
-       </size>
-      </property>
-      <property name="autoFillBackground">
-       <bool>true</bool>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
-      <property name="lineWidth">
-       <number>2</number>
-      </property>
-      <property name="midLineWidth">
-       <number>0</number>
-      </property>
-      <property name="text">
-       <string>Image Label</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Tab 2</string>
-     </attribute>
-     <widget class="ProLabel" name="imageLabel_2">
-      <property name="geometry">
-       <rect>
-        <x>-1</x>
-        <y>0</y>
-        <width>831</width>
-        <height>591</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>750</width>
-        <height>500</height>
-       </size>
-      </property>
-      <property name="autoFillBackground">
-       <bool>true</bool>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
-      <property name="lineWidth">
-       <number>2</number>
-      </property>
-      <property name="midLineWidth">
-       <number>0</number>
-      </property>
-      <property name="text">
-       <string>Image Label</string>
-      </property>
-     </widget>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
+      <x>840</x>
       <y>20</y>
-      <width>381</width>
-      <height>611</height>
+      <width>404</width>
+      <height>661</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
-      <widget class="QLabel" name="patternLabel">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Sunken</enum>
-       </property>
-       <property name="lineWidth">
-        <number>2</number>
-       </property>
-       <property name="text">
-        <string>Pattern Label</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="loadImage">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Load Image</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="LoadSelectedPattern">
+         <property name="text">
+          <string>Selected Pattern</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QPushButton" name="loadPattern">
          <property name="font">
@@ -174,160 +72,75 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="LoadSelectedPattern">
-         <property name="text">
-          <string>Selected Pattern</string>
+        <widget class="QLabel" name="patternLabel">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>100</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="loadImage">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Load Image</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QLabel" name="brightness">
-         <property name="text">
-          <string>Helligkeit</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="brightnessSlider">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
-       <item>
-        <widget class="QLabel" name="contrast">
-         <property name="text">
-          <string>Kontrast</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="contrastSlider">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Sensitivity</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDial" name="dial"/>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="sensitivityValueText"/>
-       </item>
-       <item>
-        <widget class="QPushButton" name="greyView">
-         <property name="text">
-          <string>grey View</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_8">
-       <item>
-        <widget class="QRadioButton" name="radioC">
-         <property name="text">
-          <string>C</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioM">
-         <property name="text">
-          <string>M</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioY">
-         <property name="text">
-          <string>Y</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="filterButton">
-         <property name="text">
-          <string>filter</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
+         <property name="autoFillBackground">
           <bool>false</bool>
          </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="lineWidth">
+          <number>2</number>
+         </property>
+         <property name="text">
+          <string>Pattern Label</string>
+         </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_9">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QPushButton" name="findButton6">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>mySimpleDiff</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="brightness">
+           <property name="text">
+            <string>Helligkeit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="brightnessSlider">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="findButton7">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>myDiff</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="contrast">
+           <property name="text">
+            <string>Kontrast</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="contrastSlider">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="3">
         <widget class="QPushButton" name="findButton8">
          <property name="font">
           <font>
@@ -340,93 +153,91 @@
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="findButton1">
-         <property name="text">
-          <string>SQDIFF NORMED</string>
-         </property>
-        </widget>
-       </item>
-       <item>
+       <item row="2" column="2" colspan="2">
         <widget class="QPushButton" name="findButton0">
          <property name="text">
           <string>SQDIFF</string>
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QPushButton" name="findButton3">
-         <property name="text">
-          <string>TM CCORR NORMED</string>
-         </property>
-        </widget>
-       </item>
-       <item>
+       <item row="3" column="2" colspan="2">
         <widget class="QPushButton" name="findButton2">
          <property name="text">
           <string>TM CCORR</string>
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="findButton6">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>mySimpleDiff</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
         <widget class="QPushButton" name="findButton5">
          <property name="text">
           <string>TM COEFF NORMED</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="4" column="2" colspan="2">
         <widget class="QPushButton" name="findButton4">
          <property name="text">
           <string>TM COEFF</string>
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_11">
-       <item>
-        <widget class="QLabel" name="brightness_2">
+       <item row="1" column="1" colspan="2">
+        <widget class="QPushButton" name="findButton7">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>Helligkeit</string>
+          <string>myDiff</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QSlider" name="brightnessSlider_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+       <item row="0" column="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <property name="spacing">
+          <number>0</number>
          </property>
-        </widget>
+         <item>
+          <widget class="QSpinBox" name="sensitivityValueText"/>
+         </item>
+        </layout>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_10">
-       <item>
-        <widget class="QLabel" name="contrast_2">
+       <item row="0" column="1">
+        <widget class="QDial" name="dial"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="findButton1">
          <property name="text">
-          <string>Kontrast</string>
+          <string>SQDIFF NORMED</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QSlider" name="contrastSlider_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+       <item row="3" column="0" colspan="2">
+        <widget class="QPushButton" name="findButton3">
+         <property name="text">
+          <string>TM CCORR NORMED</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Sensitivity</string>
          </property>
         </widget>
        </item>
@@ -434,8 +245,207 @@
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>802</width>
+      <height>681</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="minimumSize">
+        <size>
+         <width>800</width>
+         <height>400</height>
+        </size>
+       </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Tab 1</string>
+        </attribute>
+        <widget class="ProLabel" name="imageLabel_1">
+         <property name="geometry">
+          <rect>
+           <x>-1</x>
+           <y>0</y>
+           <width>831</width>
+           <height>591</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>750</width>
+           <height>500</height>
+          </size>
+         </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="lineWidth">
+          <number>2</number>
+         </property>
+         <property name="midLineWidth">
+          <number>0</number>
+         </property>
+         <property name="text">
+          <string>Image Label</string>
+         </property>
+        </widget>
+        <zorder>imageLabel_1</zorder>
+        <zorder></zorder>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Tab 2</string>
+        </attribute>
+        <widget class="ProLabel" name="imageLabel_2">
+         <property name="geometry">
+          <rect>
+           <x>-1</x>
+           <y>0</y>
+           <width>831</width>
+           <height>591</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>750</width>
+           <height>500</height>
+          </size>
+         </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="lineWidth">
+          <number>2</number>
+         </property>
+         <property name="midLineWidth">
+          <number>0</number>
+         </property>
+         <property name="text">
+          <string>Image Label</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QRadioButton" name="radioC">
+           <property name="text">
+            <string>C</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioM">
+           <property name="text">
+            <string>M</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioY">
+           <property name="text">
+            <string>Y</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="filterButton">
+           <property name="text">
+            <string>filter</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="greyView">
+           <property name="text">
+            <string>grey View</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QLabel" name="brightness_2">
+           <property name="text">
+            <string>Helligkeit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="brightnessSlider_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="contrast_2">
+           <property name="text">
+            <string>Kontrast</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="contrastSlider_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>tabWidget</zorder>
+   <zorder>loadImage</zorder>
+   <zorder>filterButton</zorder>
+   <zorder>loadPattern</zorder>
+   <zorder>loadPattern</zorder>
+   <zorder></zorder>
+   <zorder></zorder>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
