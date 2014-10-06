@@ -527,25 +527,57 @@ void DropMatrixMatcher::filter(int cmyk)
 
     if(cmyk<4)
     {
+        //greyToScreen is not grey, it is C,M or Y   !!!!!!
         QImage filteredImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
         filteredImg.save("./DropMatrixMatcherData/editedImage.png", 0, 100);
         *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
-
         if(colored)
         {
             myLabel->setPixmap(QPixmap::fromImage(filteredImg).scaled(w,h,Qt::KeepAspectRatio));
         }else{
             createGreyImage(*coloredImage);
+//            filter(4);
             QImage greyImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
             //greyImg.save("./DropMatrixMatcherData/editedGreyImage.png", 0, 100);
             //*greyImage = imread("./DropMatrixMatcherData/editedImage.png");
             myLabel->setPixmap(QPixmap::fromImage(greyImg).scaled(w,h,Qt::KeepAspectRatio));
         }
-    }else{
+    }else{     // only used for greyView
         QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
         myLabel->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
     }
 }
+//void DropMatrixMatcher::filter(int cmyk)
+//{
+//    int w = myLabel->width();
+//    int h = myLabel->height();
+
+//    createGreyImage(*coloredImage, cmyk);
+
+//    if(cmyk<4)
+//    {
+//        QImage filteredImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+//        filteredImg.save("./DropMatrixMatcherData/editedImage.png", 0, 100);
+//        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
+//        myLabel->setPixmap(QPixmap::fromImage(filteredImg).scaled(w,h,Qt::KeepAspectRatio));
+//        if(!colored){
+//            filter(4);
+//        }
+//    }
+//    // only used for greyView
+//    else{
+//        if(!colored){
+//            createGreyImage(*coloredImage); //cmyk = 4
+//            QImage greyImg = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+//            greyImg.save("./DropMatrixMatcherData/editedGreyImage.png", 0, 100);
+//            *greyImage = imread("./DropMatrixMatcherData/editedGreyImage.png");
+//            myLabel->setPixmap(QPixmap::fromImage(greyImg).scaled(w,h,Qt::KeepAspectRatio));
+//        }
+
+//        QImage greyQImage = QImage((unsigned char*) greyToScreen->data, greyToScreen->cols, greyToScreen->rows, greyToScreen->step, QImage::Format_RGB888);
+//        myLabel->setPixmap(QPixmap::fromImage(greyQImage).scaled(w,h,Qt::KeepAspectRatio));
+//    }
+//}
 
 Mat DropMatrixMatcher::qimage_to_mat_cpy(QImage const &img, int format)
 {
