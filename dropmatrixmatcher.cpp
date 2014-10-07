@@ -159,7 +159,7 @@ void DropMatrixMatcher::tabChanged(int tab)
 //        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
 //        createGreyImage(*coloredImage);
         // it's only possible to select a pattern out of the image in tab 1
-        ui->LoadSelectedPattern->setEnabled(true);
+//        ui->LoadSelectedPattern->setEnabled(true);
     }
     else{
         this->image = this->image_2;
@@ -171,7 +171,7 @@ void DropMatrixMatcher::tabChanged(int tab)
 //        *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
 //        createGreyImage(*coloredImage);
         // it's only possible to select a pattern out of the image in tab 1
-        ui->LoadSelectedPattern->setEnabled(false);
+//        ui->LoadSelectedPattern->setEnabled(false);
     }
 
 
