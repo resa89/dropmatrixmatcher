@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1253</width>
-    <height>706</height>
+    <width>1252</width>
+    <height>806</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -26,12 +26,12 @@
      <height>750</height>
     </size>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>840</x>
-      <y>20</y>
-      <width>404</width>
+      <x>820</x>
+      <y>10</y>
+      <width>411</width>
       <height>661</height>
      </rect>
     </property>
@@ -54,7 +54,7 @@
        <item>
         <widget class="QPushButton" name="LoadSelectedPattern">
          <property name="text">
-          <string>Selected Pattern</string>
+          <string>Select Pattern</string>
          </property>
         </widget>
        </item>
@@ -140,74 +140,56 @@
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="3">
-        <widget class="QPushButton" name="findButton8">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>myDiffNormed</string>
-         </property>
+       <item row="1" column="0" colspan="3">
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>SQDiff</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SQDiff Normed</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>TMCcorr</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>TMCcorrNormed</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>TMCoeff</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>TMCoeffNormed</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mySimpleDiff</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>myDiff</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>myDiffNormed</string>
+          </property>
+         </item>
         </widget>
        </item>
-       <item row="2" column="2" colspan="2">
-        <widget class="QPushButton" name="findButton0">
-         <property name="text">
-          <string>SQDIFF</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2" colspan="2">
-        <widget class="QPushButton" name="findButton2">
-         <property name="text">
-          <string>TM CCORR</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="findButton6">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>mySimpleDiff</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QPushButton" name="findButton5">
-         <property name="text">
-          <string>TM COEFF NORMED</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2" colspan="2">
-        <widget class="QPushButton" name="findButton4">
-         <property name="text">
-          <string>TM COEFF</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="2">
-        <widget class="QPushButton" name="findButton7">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>myDiff</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
+       <item row="0" column="2">
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <property name="spacing">
           <number>0</number>
@@ -220,20 +202,6 @@
        <item row="0" column="1">
         <widget class="QDial" name="dial"/>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="findButton1">
-         <property name="text">
-          <string>SQDIFF NORMED</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QPushButton" name="findButton3">
-         <property name="text">
-          <string>TM CCORR NORMED</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -241,11 +209,18 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="compareButton">
+         <property name="text">
+          <string>Compare</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -304,8 +279,6 @@
           <string>Image Label</string>
          </property>
         </widget>
-        <zorder>imageLabel_1</zorder>
-        <zorder></zorder>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -353,23 +326,46 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
+          <widget class="QPushButton" name="greyView">
+           <property name="text">
+            <string>grey View</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QRadioButton" name="radioC">
            <property name="text">
-            <string>C</string>
+            <string>Cyan</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="radioM">
            <property name="text">
-            <string>M</string>
+            <string>Magenta</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="radioY">
            <property name="text">
-            <string>Y</string>
+            <string>Yellow</string>
            </property>
           </widget>
          </item>
@@ -383,16 +379,6 @@
            </property>
            <property name="checked">
             <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="greyView">
-           <property name="text">
-            <string>grey View</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -439,13 +425,7 @@
     </layout>
    </widget>
    <zorder>layoutWidget</zorder>
-   <zorder>tabWidget</zorder>
-   <zorder>loadImage</zorder>
-   <zorder>filterButton</zorder>
-   <zorder>loadPattern</zorder>
-   <zorder>loadPattern</zorder>
-   <zorder></zorder>
-   <zorder></zorder>
+   <zorder>layoutWidget</zorder>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -461,7 +441,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1253</width>
+     <width>1252</width>
      <height>22</height>
     </rect>
    </property>

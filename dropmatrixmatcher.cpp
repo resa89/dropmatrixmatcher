@@ -32,6 +32,11 @@ DropMatrixMatcher::DropMatrixMatcher(QWidget *parent) :
     colored = true;
     imagePath = new QString;
     myLabel = new ProLabel;
+//    QToolBar *toolBar = new QToolBar("toolBar");
+//    QMenu *methodMenu = new QMenu( ui->toolButton );
+//    ui->toolButton->setMenu( methodMenu );
+//    ui->toolButton->setPopupMode( QToolButton::MenuButtonPopup );
+
 
     ui->setupUi(this);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
@@ -48,18 +53,18 @@ DropMatrixMatcher::DropMatrixMatcher(QWidget *parent) :
     this->setWindowTitle("Drop Matrix Matcher");
     this->setWindowIcon(QIcon("matcher.icns"));
 
-    ui->findButton0->setDefault(true);
-    ui->findButton0->setEnabled(false);
-    ui->findButton1->setDefault(true);
-    ui->findButton1->setEnabled(false);
-    ui->findButton2->setDefault(true);
-    ui->findButton2->setEnabled(false);
-    ui->findButton3->setDefault(true);
-    ui->findButton3->setEnabled(false);
-    ui->findButton4->setDefault(true);
-    ui->findButton4->setEnabled(false);
-    ui->findButton5->setDefault(true);
-    ui->findButton5->setEnabled(false);
+//    ui->findButton0->setDefault(true);
+//    ui->findButton0->setEnabled(false);
+//    ui->findButton1->setDefault(true);
+//    ui->findButton1->setEnabled(false);
+//    ui->findButton2->setDefault(true);
+//    ui->findButton2->setEnabled(false);
+//    ui->findButton3->setDefault(true);
+//    ui->findButton3->setEnabled(false);
+//    ui->findButton4->setDefault(true);
+//    ui->findButton4->setEnabled(false);
+//    ui->findButton5->setDefault(true);
+//    ui->findButton5->setEnabled(false);
 
     ui->brightnessSlider->setMinimum(-100);
     ui->brightnessSlider->setMaximum(100);
@@ -126,12 +131,12 @@ void DropMatrixMatcher::enableFindButtons()
 {
     if (!image->isNull() && !pattern->isNull())
     {
-        ui->findButton0->setEnabled(true);
-        ui->findButton1->setEnabled(true);
-        ui->findButton2->setEnabled(true);
-        ui->findButton3->setEnabled(true);
-        ui->findButton4->setEnabled(true);
-        ui->findButton5->setEnabled(true);
+//        ui->findButton0->setEnabled(true);
+//        ui->findButton1->setEnabled(true);
+//        ui->findButton2->setEnabled(true);
+//        ui->findButton3->setEnabled(true);
+//        ui->findButton4->setEnabled(true);
+//        ui->findButton5->setEnabled(true);
 
     }
 }
@@ -183,10 +188,11 @@ void DropMatrixMatcher::on_loadPattern_clicked()
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
 
-    pattern->load(fileName);
-    patternPath = fileName;
-
-    createAllImages(false);
+    if(!fileName.isEmpty()){
+        pattern->load(fileName);
+        patternPath = fileName;
+        createAllImages(false);
+    }
 //    pattern->save("./DropMatrixMatcherData/editedPattern.png", 0, 100);
 //    *coloredPattern = imread("./DropMatrixMatcherData/editedPattern.png");
 //    createGreyPattern(*coloredPattern);
@@ -206,11 +212,14 @@ void DropMatrixMatcher::on_loadImage_clicked()
     fileName = dialog.getOpenFileName(this,
         tr("Open Image"), "./..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
 
-    Mat matImage;
-    image->load(fileName);
-    *imagePath = fileName;
+    if(!fileName.isEmpty()){
+        Mat matImage;
+        image->load(fileName);
+        *imagePath = fileName;
 
-    createAllImages(true);
+        createAllImages(true);
+    }
+
 //    image->save("./DropMatrixMatcherData/editedImage.png", 0, 100);
 //    *coloredImage = imread("./DropMatrixMatcherData/editedImage.png");
 //    createGreyImage(*coloredImage);
@@ -241,6 +250,44 @@ void DropMatrixMatcher::displayImageInImageLabel(Mat mat)
     myLabel->setPixmap(pixmap.scaled(w,h,Qt::KeepAspectRatio));
 }
 
+
+void DropMatrixMatcher::on_compareButton_clicked()
+{
+    int method = this->ui->comboBox->currentIndex();
+    if(method == 0){
+        matchingWithCvMethod(0, sensitivityRange);
+    }else if(method){
+        matchingWithCvMethod(1, sensitivityRange);
+    }else if(method){
+        matchingWithCvMethod(2, sensitivityRange);
+    }else if(method){
+        matchingWithCvMethod(3, sensitivityRange);
+    }else if(method){
+        matchingWithCvMethod(4, sensitivityRange);
+    }else if(method){
+        matchingWithCvMethod(5, sensitivityRange);
+    }else if(method){
+        matchingWithCvMethod(6, sensitivityRange);
+    }else if(method){
+        matchingWithCvMethod(7, sensitivityRange);
+    }else if(method){
+        matchingWithCvMethod(8, sensitivityRange);
+    }else{
+//        MessageBox(NULL, "Method Error", "No valid method is selected.");
+    }
+//        switch ( this->ui->comboBox->currentIndex()  ) {
+//          case 1 :
+//            // Process for test = 1
+//            break;
+
+//          case 5 :
+//            // Process for test = 5
+//            break;
+
+//          default :
+//            // Process for all other cases.
+//        }
+}
 
 void DropMatrixMatcher::on_findButton0_clicked()
 {

@@ -54,6 +54,8 @@ private slots:
 
     void on_LoadSelectedPattern_clicked();
 
+    void on_compareButton_clicked();
+
 private:
     Ui::DropMatrixMatcher *ui;
     QImage *pattern;
@@ -74,6 +76,8 @@ private:
     double greyPatternPixelSumPow;
     bool colored;
     ProLabel *myLabel;
+//    QToolBar *toolBar;
+//    QMenu *methodMenu;
 
     void displayImageInImageLabel(cv::Mat image);
     void matchingWithMethod(int method, float sensitivity);
