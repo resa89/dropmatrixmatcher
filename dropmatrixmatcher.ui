@@ -29,10 +29,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>820</x>
+      <x>900</x>
       <y>10</y>
-      <width>411</width>
-      <height>661</height>
+      <width>341</width>
+      <height>681</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -83,7 +83,7 @@
          <property name="minimumSize">
           <size>
            <width>150</width>
-           <height>100</height>
+           <height>200</height>
           </size>
          </property>
          <property name="autoFillBackground">
@@ -147,7 +147,57 @@
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="0" colspan="3">
+       <item row="1" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QSpinBox" name="sensitivityValueText"/>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="1">
+        <widget class="QDial" name="dial">
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Sensitivity</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="compareButton">
+         <property name="text">
+          <string>detect match</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0" colspan="3">
         <widget class="QComboBox" name="comboBox">
          <item>
           <property name="text">
@@ -196,33 +246,6 @@
          </item>
         </widget>
        </item>
-       <item row="0" column="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QSpinBox" name="sensitivityValueText"/>
-         </item>
-        </layout>
-       </item>
-       <item row="0" column="1">
-        <widget class="QDial" name="dial"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Sensitivity</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="compareButton">
-         <property name="text">
-          <string>detect match</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
@@ -232,7 +255,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>802</width>
+      <width>881</width>
       <height>681</height>
      </rect>
     </property>
@@ -246,7 +269,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -257,8 +280,8 @@
           <rect>
            <x>-1</x>
            <y>0</y>
-           <width>831</width>
-           <height>591</height>
+           <width>871</width>
+           <height>541</height>
           </rect>
          </property>
          <property name="minimumSize">
@@ -296,8 +319,8 @@
           <rect>
            <x>-1</x>
            <y>0</y>
-           <width>831</width>
-           <height>591</height>
+           <width>871</width>
+           <height>541</height>
           </rect>
          </property>
          <property name="minimumSize">
