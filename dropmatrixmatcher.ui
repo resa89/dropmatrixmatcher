@@ -53,6 +53,12 @@
        </item>
        <item>
         <widget class="QPushButton" name="LoadSelectedPattern">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Select Pattern</string>
          </property>
@@ -62,8 +68,9 @@
         <widget class="QPushButton" name="loadPattern">
          <property name="font">
           <font>
-           <weight>75</weight>
-           <bold>true</bold>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -105,7 +112,7 @@
          <item>
           <widget class="QLabel" name="brightness">
            <property name="text">
-            <string>Helligkeit</string>
+            <string>brightness</string>
            </property>
           </widget>
          </item>
@@ -123,7 +130,7 @@
          <item>
           <widget class="QLabel" name="contrast">
            <property name="text">
-            <string>Kontrast</string>
+            <string>contrast</string>
            </property>
           </widget>
          </item>
@@ -212,7 +219,7 @@
        <item row="2" column="2">
         <widget class="QPushButton" name="compareButton">
          <property name="text">
-          <string>Compare</string>
+          <string>detect match</string>
          </property>
         </widget>
        </item>
@@ -328,7 +335,7 @@
          <item>
           <widget class="QPushButton" name="greyView">
            <property name="text">
-            <string>grey View</string>
+            <string>grey view</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -389,7 +396,7 @@
          <item>
           <widget class="QLabel" name="brightness_2">
            <property name="text">
-            <string>Helligkeit</string>
+            <string>brightness</string>
            </property>
           </widget>
          </item>
@@ -407,7 +414,7 @@
          <item>
           <widget class="QLabel" name="contrast_2">
            <property name="text">
-            <string>Kontrast</string>
+            <string>contrast</string>
            </property>
           </widget>
          </item>
@@ -424,8 +431,6 @@
      </item>
     </layout>
    </widget>
-   <zorder>layoutWidget</zorder>
-   <zorder>layoutWidget</zorder>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

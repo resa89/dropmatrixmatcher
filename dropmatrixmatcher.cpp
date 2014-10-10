@@ -148,6 +148,9 @@ DropMatrixMatcher::~DropMatrixMatcher()
 
 void DropMatrixMatcher::tabChanged(int tab)
 {
+//    ui->brightnessSlider_2->setSliderPosition(0);
+//    ui->contrastSlider_2->setSliderPosition(100);
+
     if(tab == 0)
     {
         this->image = this->image_1;
