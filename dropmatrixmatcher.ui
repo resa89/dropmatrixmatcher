@@ -60,7 +60,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Select Pattern</string>
+          <string>Select Drop Matrix</string>
          </property>
         </widget>
        </item>
@@ -74,7 +74,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Load Pattern</string>
+          <string>Load extern Drop Matrix</string>
          </property>
         </widget>
        </item>
@@ -170,7 +170,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Sensitivity</string>
+          <string>sensitivity</string>
          </property>
         </widget>
        </item>
@@ -199,49 +199,52 @@
        </item>
        <item row="2" column="0" colspan="3">
         <widget class="QComboBox" name="comboBox">
+         <property name="currentText">
+          <string>Method 3 - normed</string>
+         </property>
          <item>
           <property name="text">
-           <string>SQDiff</string>
+           <string>Method 1</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>SQDiff Normed</string>
+           <string>Method 1 - normed</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>TMCcorr</string>
+           <string>Method 2</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>TMCcorrNormed</string>
+           <string>Method 2 - normed</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>TMCoeff</string>
+           <string>Method 3</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>TMCoeffNormed</string>
+           <string>Method 3 - normed</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>mySimpleDiff</string>
+           <string>Test Method A</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>myDiff</string>
+           <string>Test Method B</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>myDiffNormed</string>
+           <string>Test Method B - normed</string>
           </property>
          </item>
         </widget>
@@ -381,21 +384,21 @@
          <item>
           <widget class="QRadioButton" name="radioC">
            <property name="text">
-            <string>Cyan</string>
+            <string>cyan</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="radioM">
            <property name="text">
-            <string>Magenta</string>
+            <string>magenta</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="radioY">
            <property name="text">
-            <string>Yellow</string>
+            <string>yellow</string>
            </property>
           </widget>
          </item>
@@ -464,22 +467,6 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1252</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuDrop_Matrix_Matcher">
-    <property name="title">
-     <string>Drop Matrix Matcher</string>
-    </property>
-   </widget>
-   <addaction name="menuDrop_Matrix_Matcher"/>
-  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

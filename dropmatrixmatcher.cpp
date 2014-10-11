@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QFile>
 #include <QDir>
+#include <QMessageBox>
 #include <iostream>
 #include <stdio.h>
 
@@ -37,6 +38,9 @@ DropMatrixMatcher::DropMatrixMatcher(QWidget *parent) :
 //    ui->toolButton->setMenu( methodMenu );
 //    ui->toolButton->setPopupMode( QToolButton::MenuButtonPopup );
 
+    QIcon icon;
+    icon.addFile("DMM.icns");
+    this->setWindowIcon(icon);
 
     ui->setupUi(this);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
@@ -187,7 +191,7 @@ void DropMatrixMatcher::on_loadPattern_clicked()
     Mat matPattern;
 
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "./..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
+        tr("Open Image"), ".", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
 
@@ -213,7 +217,7 @@ void DropMatrixMatcher::on_loadImage_clicked()
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "./..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
+        tr("Open Image"), ".", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
 
     if(!fileName.isEmpty()){
         Mat matImage;
@@ -256,86 +260,87 @@ void DropMatrixMatcher::displayImageInImageLabel(Mat mat)
 
 void DropMatrixMatcher::on_compareButton_clicked()
 {
-    int method = this->ui->comboBox->currentIndex();
-    if(method == 0){
-        matchingWithCvMethod(0, sensitivityRange);
-    }else if(method){
-        matchingWithCvMethod(1, sensitivityRange);
-    }else if(method){
-        matchingWithCvMethod(2, sensitivityRange);
-    }else if(method){
-        matchingWithCvMethod(3, sensitivityRange);
-    }else if(method){
-        matchingWithCvMethod(4, sensitivityRange);
-    }else if(method){
-        matchingWithCvMethod(5, sensitivityRange);
-    }else if(method){
-        matchingWithCvMethod(6, sensitivityRange);
-    }else if(method){
-        matchingWithCvMethod(7, sensitivityRange);
-    }else if(method){
-        matchingWithCvMethod(8, sensitivityRange);
-    }else{
-//        MessageBox(NULL, "Method Error", "No valid method is selected.");
+    if(this->pattern->isNull()){
+        QMessageBox noDropMatrixSelected;
+        noDropMatrixSelected.setText("You have to select a Drop Matrix first.");
+        noDropMatrixSelected.exec();
+        }else{
+        int method = this->ui->comboBox->currentIndex();
+        if(method == 0){
+            //SQDiff
+            matchingWithCvMethod(0, sensitivityRange);
+        }else if(method == 1){
+            //SQDiff Normed
+            matchingWithCvMethod(1, sensitivityRange);
+        }else if(method == 2){
+            //TMCCorr
+            matchingWithCvMethod(2, sensitivityRange);
+        }else if(method == 3){
+            //TMCCorr Normed
+            matchingWithCvMethod(3, sensitivityRange);
+        }else if(method == 4){
+            //TMCCoeff
+            matchingWithCvMethod(4, sensitivityRange);
+        }else if(method == 5){
+            //TMCCoeff Normed
+            matchingWithCvMethod(5, sensitivityRange);
+        }else if(method == 6){
+            //my Simple Diff
+            matchingWithCvMethod(6, sensitivityRange);
+        }else if(method == 7){
+            //my Diff
+            matchingWithCvMethod(7, sensitivityRange);
+        }else if(method == 8){
+            //my Diff Normed
+            matchingWithCvMethod(8, sensitivityRange);
+        }
     }
-//        switch ( this->ui->comboBox->currentIndex()  ) {
-//          case 1 :
-//            // Process for test = 1
-//            break;
-
-//          case 5 :
-//            // Process for test = 5
-//            break;
-
-//          default :
-//            // Process for all other cases.
-//        }
 }
 
-void DropMatrixMatcher::on_findButton0_clicked()
-{
-    matchingWithCvMethod(0, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton0_clicked()
+//{
+//    matchingWithCvMethod(0, sensitivityRange);
+//}
 
-void DropMatrixMatcher::on_findButton1_clicked()
-{
-    matchingWithCvMethod(1, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton1_clicked()
+//{
+//    matchingWithCvMethod(1, sensitivityRange);
+//}
 
-void DropMatrixMatcher::on_findButton2_clicked()
-{
-    matchingWithCvMethod(2, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton2_clicked()
+//{
+//    matchingWithCvMethod(2, sensitivityRange);
+//}
 
-void DropMatrixMatcher::on_findButton3_clicked()
-{
-    matchingWithCvMethod(3, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton3_clicked()
+//{
+//    matchingWithCvMethod(3, sensitivityRange);
+//}
 
-void DropMatrixMatcher::on_findButton4_clicked()
-{
-    matchingWithCvMethod(4, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton4_clicked()
+//{
+//    matchingWithCvMethod(4, sensitivityRange);
+//}
 
-void DropMatrixMatcher::on_findButton5_clicked()
-{
-    matchingWithCvMethod(5, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton5_clicked()
+//{
+//    matchingWithCvMethod(5, sensitivityRange);
+//}
 
-void DropMatrixMatcher::on_findButton6_clicked()
-{
-    matchingWithMethod(6, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton6_clicked()
+//{
+//    matchingWithMethod(6, sensitivityRange);
+//}
 
-void DropMatrixMatcher::on_findButton7_clicked()
-{
-    matchingWithMethod(7, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton7_clicked()
+//{
+//    matchingWithMethod(7, sensitivityRange);
+//}
 
-void DropMatrixMatcher::on_findButton8_clicked()
-{
-    matchingWithMethod(8, sensitivityRange);
-}
+//void DropMatrixMatcher::on_findButton8_clicked()
+//{
+//    matchingWithMethod(8, sensitivityRange);
+//}
 
 void DropMatrixMatcher::on_LoadSelectedPattern_clicked()
 {

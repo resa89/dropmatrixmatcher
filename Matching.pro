@@ -34,5 +34,5 @@ LIBS += -L/usr/local/lib \
 FORMS    += \
     dropmatrixmatcher.ui
 
-ICON = matcher.icns
+ICON = DMM_logo.icns
 

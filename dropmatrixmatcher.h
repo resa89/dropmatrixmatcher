@@ -42,15 +42,15 @@ private slots:
     void tabChanged(int tab);
 
 
-    void on_findButton0_clicked();
-    void on_findButton1_clicked();
-    void on_findButton2_clicked();
-    void on_findButton3_clicked();
-    void on_findButton4_clicked();
-    void on_findButton5_clicked();
-    void on_findButton6_clicked();
-    void on_findButton7_clicked();
-    void on_findButton8_clicked();
+//    void on_findButton0_clicked();
+//    void on_findButton1_clicked();
+//    void on_findButton2_clicked();
+//    void on_findButton3_clicked();
+//    void on_findButton4_clicked();
+//    void on_findButton5_clicked();
+//    void on_findButton6_clicked();
+//    void on_findButton7_clicked();
+//    void on_findButton8_clicked();
 
     void on_LoadSelectedPattern_clicked();
 
