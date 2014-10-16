@@ -550,12 +550,14 @@ void DropMatrixMatcher::filterImage()
         this->ui->filterButton->setFlat(false);
         this->ui->contrastSlider_2->setDisabled(false);
         this->ui->brightnessSlider_2->setDisabled(false);
+        this->ui->greyView->setFlat(false);
 
 
     }else{
          this->ui->filterButton->setFlat(true);
         this->ui->contrastSlider_2->setDisabled(true);
         this->ui->brightnessSlider_2->setDisabled(true);
+        this->ui->greyView->setFlat(true);
     }
 }
 
