@@ -8,6 +8,8 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
+
+
 class QPixmap;
 class QLabel;
 class QPushButton;
@@ -56,6 +58,8 @@ private slots:
 
     void on_compareButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::DropMatrixMatcher *ui;
     QImage *pattern;
@@ -76,6 +80,8 @@ private:
     double greyPatternPixelSumPow;
     bool colored;
     ProLabel *myLabel;
+    //HelpWindow *hwindow;
+
 //    QToolBar *toolBar;
 //    QMenu *methodMenu;
 

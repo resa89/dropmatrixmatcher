@@ -2,6 +2,7 @@
 
 #include "dropmatrixmatcher.h"
 #include "ui_dropmatrixmatcher.h"
+#include "helpwindow.h"
 
 #include <QFileDialog>
 #include <QStringList>
@@ -33,6 +34,8 @@ DropMatrixMatcher::DropMatrixMatcher(QWidget *parent) :
     colored = true;
     imagePath = new QString;
     myLabel = new ProLabel;
+    //hwindow = new HelpWindow;
+
 //    QToolBar *toolBar = new QToolBar("toolBar");
 //    QMenu *methodMenu = new QMenu( ui->toolButton );
 //    ui->toolButton->setMenu( methodMenu );
@@ -119,9 +122,10 @@ DropMatrixMatcher::DropMatrixMatcher(QWidget *parent) :
             this, SLOT(filterImage()));
     connect(ui->greyView, SIGNAL(clicked(bool)),
             this, SLOT(useGreyView()));
-
     connect(ui->tabWidget, SIGNAL(currentChanged(int)),
             this, SLOT(tabChanged(int)));
+//    connect(ui->pushButton, SIGNAL(clicked()),
+//            this->hwindow, SLOT(show()));
 
     bool folderAlreadyExists = QDir("DropMatrixMatcherData").exists();
     if(!folderAlreadyExists)
@@ -659,3 +663,7 @@ void DropMatrixMatcher::createAllImages(bool image)                        //ima
     }
 }
 
+void DropMatrixMatcher::on_pushButton_clicked(){
+    HelpWindow *hWindow = new HelpWindow(0);
+    hWindow->setVisible(true);
+}

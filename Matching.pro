@@ -19,11 +19,13 @@ SOURCES += main.cpp \
     prolabel.cpp \
     matching.cpp \
     greydrawing.cpp \
-    dropmatrixmatcher.cpp
+    dropmatrixmatcher.cpp \
+    helpwindow.cpp
 
 HEADERS  += \
     prolabel.h \
-    dropmatrixmatcher.h
+    dropmatrixmatcher.h \
+    helpwindow.h
 
 LIBS += -L/usr/local/lib \
     -lopencv_core \
@@ -32,7 +34,8 @@ LIBS += -L/usr/local/lib \
     -lopencv_imgproc
 
 FORMS    += \
-    dropmatrixmatcher.ui
+    dropmatrixmatcher.ui \
+    helpwindow.ui
 
 ICON = DMM_logo2.icns
 
