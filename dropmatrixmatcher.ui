@@ -80,10 +80,19 @@
        </item>
        <item>
         <widget class="QLabel" name="patternLabel">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>150</width>
-           <height>200</height>
+           <width>300</width>
+           <height>300</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>300</height>
           </size>
          </property>
          <property name="autoFillBackground">
@@ -200,7 +209,7 @@
        <item row="2" column="0" colspan="3">
         <widget class="QComboBox" name="comboBox">
          <property name="currentText">
-          <string>Method 3 - normed</string>
+          <string>Method 1</string>
          </property>
          <item>
           <property name="text">
