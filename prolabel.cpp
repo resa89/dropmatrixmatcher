@@ -70,6 +70,20 @@ void ProLabel::saveSlot()
 QRect ProLabel::getQImageRect(float widthFactor, float heightFactor)
 {
     QRect qimageSizedRect;
+
+    int x1 = this->selectionRect.left();
+    int x2 = this->selectionRect.right();
+    int y1 = this->selectionRect.top();
+    int y2 = this->selectionRect.bottom();
+
+    if (x1 > x2){
+        QPoint firstPoint = QPoint(x1, y1);
+        QPoint secondPoint = QPoint(x2, y2);
+
+        this->selectionRect.setTopLeft(secondPoint);
+        this->selectionRect.setBottomRight(firstPoint);
+    }
+
     int x = (float)selectionRect.x() * widthFactor;
     int y = (float)selectionRect.y() * heightFactor;
     int w = (float)selectionRect.width() * widthFactor;

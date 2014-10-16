@@ -658,3 +658,4 @@ void DropMatrixMatcher::createAllImages(bool image)                        //ima
         createGreyPattern(*coloredPattern);
     }
 }
+
