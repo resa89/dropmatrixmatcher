@@ -176,7 +176,7 @@
        <item row="2" column="0" colspan="3">
         <widget class="QComboBox" name="comboBox">
          <property name="currentText">
-          <string>Method 1</string>
+          <string>Method 3 - normed</string>
          </property>
          <item>
           <property name="text">
