@@ -195,7 +195,7 @@ void DropMatrixMatcher::on_loadPattern_clicked()
     Mat matPattern;
 
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), ".", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
+        tr("Open Image"), "..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
 
@@ -221,7 +221,7 @@ void DropMatrixMatcher::on_loadImage_clicked()
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), ".", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
+        tr("Open Image"), "..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
 
     if(!fileName.isEmpty()){
         Mat matImage;
