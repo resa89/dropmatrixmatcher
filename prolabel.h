@@ -1,6 +1,7 @@
 #ifndef PROLABEL_H
 #define PROLABEL_H
 
+//#include "qrect.h"
 #include <QLabel>
 #include <QMenu>
 

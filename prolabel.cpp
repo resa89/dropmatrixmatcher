@@ -62,7 +62,7 @@ void ProLabel::mouseReleaseEvent(QMouseEvent *e)
 void ProLabel::saveSlot()
 {
     QString fileName = QFileDialog::getSaveFileName(this, QObject::tr("Save File"),
-                                                    "/home",
+                                                    "/home",               //"~/"
                                                     QObject::tr("Images (*.jpg)"));
     this->pixmap()->copy(selectionRect).save(fileName);
 }
