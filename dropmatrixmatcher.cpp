@@ -12,6 +12,10 @@
 #include <iostream>
 #include <stdio.h>
 
+#ifdef __APPLE__
+#include "CoreFoundation/CoreFoundation.h"
+#endif
+
 using namespace std;
 using namespace cv;
 
@@ -40,6 +44,23 @@ DropMatrixMatcher::DropMatrixMatcher(QWidget *parent) :
 //    QMenu *methodMenu = new QMenu( ui->toolButton );
 //    ui->toolButton->setMenu( methodMenu );
 //    ui->toolButton->setPopupMode( QToolButton::MenuButtonPopup );
+
+
+    // This makes relative paths work in C++ in Xcode by changing directory to the Resources         folder inside the .app bundle
+    #ifdef __APPLE__
+        CFBundleRef mainBundle = CFBundleGetMainBundle();
+        CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+        char path[PATH_MAX];
+        if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
+        {
+            // error!
+        }
+        CFRelease(resourcesURL);
+
+        chdir(path);
+        std::cout << "Current Path: " << path << std::endl;
+    #endif
+    // ----------------------------------------------------------------------------
 
     QIcon icon;
     icon.addFile("DMM.icns");
@@ -127,10 +148,10 @@ DropMatrixMatcher::DropMatrixMatcher(QWidget *parent) :
 //    connect(ui->pushButton, SIGNAL(clicked()),
 //            this->hwindow, SLOT(show()));
 
-    bool folderAlreadyExists = QDir("DropMatrixMatcherData").exists();
+    bool folderAlreadyExists = QDir("./DropMatrixMatcherData").exists();
     if(!folderAlreadyExists)
     {
-        QDir().mkdir("DropMatrixMatcherData");
+        QDir().mkdir("./DropMatrixMatcherData");
     }
 }
 
@@ -195,7 +216,7 @@ void DropMatrixMatcher::on_loadPattern_clicked()
     Mat matPattern;
 
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
+        tr("Open Image"), "../..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
     int w = ui->patternLabel->width();
     int h = ui->patternLabel->height();
 
@@ -221,10 +242,10 @@ void DropMatrixMatcher::on_loadImage_clicked()
     QString fileName;
     QFileDialog dialog;
     fileName = dialog.getOpenFileName(this,
-        tr("Open Image"), "..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
+        tr("Open Image"), "../..", tr("Image Files (*.png *.jpg *.bmp *.tif)"));
 
     if(!fileName.isEmpty()){
-        Mat matImage;
+        //Mat matImage;
         image->load(fileName);
         *imagePath = fileName;
 

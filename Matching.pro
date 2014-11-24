@@ -39,3 +39,5 @@ FORMS    += \
 
 ICON = DMM_logo2.icns
 
+
+mac: LIBS += -framework CoreFoundation

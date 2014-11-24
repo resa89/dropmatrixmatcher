@@ -1,4 +1,4 @@
-#include "prolabel.h"
+﻿#include "prolabel.h"
 #include <QPainter>
 #include <QMouseEvent>
 #include <QDebug>
@@ -62,7 +62,7 @@ void ProLabel::mouseReleaseEvent(QMouseEvent *e)
 void ProLabel::saveSlot()
 {
     QString fileName = QFileDialog::getSaveFileName(this, QObject::tr("Save File"),
-                                                    "/home",               //"~/"
+                                                    "./DropMatrixMatcherData",               //"~/"
                                                     QObject::tr("Images (*.jpg)"));
     this->pixmap()->copy(selectionRect).save(fileName);
 }
@@ -71,6 +71,13 @@ QRect ProLabel::getQImageRect(float widthFactor, float heightFactor)
 {
     QRect qimageSizedRect;
 
+//      ////1.0
+//    int x = (float)selectionRect.x() * widthFactor;
+//    int y = (float)selectionRect.y() * heightFactor;
+//    int w = (float)selectionRect.width() * widthFactor;
+//    int h = (float)selectionRect.height() * heightFactor;
+
+    ////<- new after 1.0: selection of rectangle also possible from right bottom to left top
     int x1 = this->selectionRect.left();
     int x2 = this->selectionRect.right();
     int y1 = this->selectionRect.top();
@@ -88,6 +95,7 @@ QRect ProLabel::getQImageRect(float widthFactor, float heightFactor)
     int y = (float)selectionRect.y() * heightFactor;
     int w = (float)selectionRect.width() * widthFactor;
     int h = (float)selectionRect.height() * heightFactor;
+    ////-> end
 
     qimageSizedRect.setX(x);
     qimageSizedRect.setY(y);
