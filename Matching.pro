@@ -13,8 +13,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Matching
 TEMPLATE = app
 
-INCLUDEPATH = /usr/local/include
-
 SOURCES += main.cpp \
     prolabel.cpp \
     matching.cpp \
@@ -27,17 +25,50 @@ HEADERS  += \
     dropmatrixmatcher.h \
     helpwindow.h
 
-LIBS += -L/usr/local/lib \
+FORMS    += \
+    dropmatrixmatcher.ui \
+    helpwindow.ui
+
+#-------------------------------------------------
+# MacOS - libs
+#-------------------------------------------------
+mac: INCLUDEPATH = /usr/local/include
+
+mac: LIBS += -L/usr/local/lib \
     -lopencv_core \
     -lopencv_highgui \
     -lopencv_video \
     -lopencv_imgproc
 
-FORMS    += \
-    dropmatrixmatcher.ui \
-    helpwindow.ui
-
-ICON = DMM_logo2.icns
-
-
 mac: LIBS += -framework CoreFoundation
+
+#-------------------------------------------------
+# Windows32 - libs
+#-------------------------------------------------
+win32: INCLUDEPATH += C:/Users/thkocher/opencv/build/include
+win32: DEPENDPATH += C:/Users/thkocher/opencv/build/include
+
+win32:CONFIG(release, debug|release): LIBS += -LC:/Users/thkocher/opencv/build/x86/vc11/lib/ -lopencv_core249 -lopencv_highgui249 -lopencv_video249 -lopencv_imgproc249
+else:win32:CONFIG(debug, debug|release): LIBS += -LC:/Users/thkocher/opencv/build/x86/vc11/lib/ -lopencv_core249d -lopencv_highgui249d -lopencv_video249d -lopencv_imgproc249d
+
+#-------------------------------------------------
+# Windows64 - libs
+#-------------------------------------------------
+win64: INCLUDEPATH += C:/openCV/opencv/build/include
+win64: DEPENDPATH += C:/openCV/opencv/build/include
+
+win64:CONFIG(release, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410 -lopencv_highgui2410 -lopencv_video2410 -lopencv_imgproc2410
+else:win64:CONFIG(debug, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410d -lopencv_highgui2410d -lopencv_video2410d -lopencv_imgproc2410d
+
+#-------------------------------------------------
+# Icon for Mac
+#-------------------------------------------------
+mac: ICON = DMM_logo2.icns
+
+#-------------------------------------------------
+# Icon for Windows
+#-------------------------------------------------
+win32: RC_FILE = dmm.rc
+
+win32: OTHER_FILES += \
+    dmm.rc
