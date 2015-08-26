@@ -3,6 +3,7 @@
 #include "dropmatrixmatcher.h"
 #include "ui_dropmatrixmatcher.h"
 #include "helpwindow.h"
+#include "window.h"
 
 #include <QFileDialog>
 #include <QStringList>
@@ -694,6 +695,6 @@ void DropMatrixMatcher::on_pushButton_clicked(){
 void DropMatrixMatcher::on_pushButton_2_clicked()
 {
     //*imagePath
-    HelpWindow *hWindow = new HelpWindow(0);
-    hWindow->setVisible(true);
+    Window *dbwindow = new Window(0, *imagePath);
+    dbwindow->setVisible(true);
 }

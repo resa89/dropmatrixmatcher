@@ -18,12 +18,24 @@ SOURCES += main.cpp \
     matching.cpp \
     greydrawing.cpp \
     dropmatrixmatcher.cpp \
-    helpwindow.cpp
+    helpwindow.cpp \
+    window.cpp
 
 HEADERS  += \
     prolabel.h \
     dropmatrixmatcher.h \
-    helpwindow.h
+    helpwindow.h \
+    window.h
+
+QT += sql widgets
+
+QT += network
+
+# install
+target.path = $$[QT_INSTALL_EXAMPLES]/sql/sqlwidgetmapper
+INSTALLS += target
+
+wince*: DEPLOYMENT_PLUGIN += qsqlite
 
 FORMS    += \
     dropmatrixmatcher.ui \
@@ -45,20 +57,20 @@ mac: LIBS += -framework CoreFoundation
 #-------------------------------------------------
 # Windows32 - libs
 #-------------------------------------------------
-win32: INCLUDEPATH += C:/Users/thkocher/opencv/build/include
-win32: DEPENDPATH += C:/Users/thkocher/opencv/build/include
+#win32: INCLUDEPATH += C:/Users/thkocher/opencv/build/include
+#win32: DEPENDPATH += C:/Users/thkocher/opencv/build/include
 
-win32:CONFIG(release, debug|release): LIBS += -LC:/Users/thkocher/opencv/build/x86/vc11/lib/ -lopencv_core249 -lopencv_highgui249 -lopencv_video249 -lopencv_imgproc249
-else:win32:CONFIG(debug, debug|release): LIBS += -LC:/Users/thkocher/opencv/build/x86/vc11/lib/ -lopencv_core249d -lopencv_highgui249d -lopencv_video249d -lopencv_imgproc249d
+#win32:CONFIG(release, debug|release): LIBS += -LC:/Users/thkocher/opencv/build/x86/vc11/lib/ -lopencv_core249 -lopencv_highgui249 -lopencv_video249 -lopencv_imgproc249
+#else:win32:CONFIG(debug, debug|release): LIBS += -LC:/Users/thkocher/opencv/build/x86/vc11/lib/ -lopencv_core249d -lopencv_highgui249d -lopencv_video249d -lopencv_imgproc249d
 
 #-------------------------------------------------
 # Windows64 - libs
 #-------------------------------------------------
-win64: INCLUDEPATH += C:/openCV/opencv/build/include
-win64: DEPENDPATH += C:/openCV/opencv/build/include
+INCLUDEPATH += C:/openCV/opencv/build/include
+DEPENDPATH += C:/openCV/opencv/build/include
 
-win64:CONFIG(release, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410 -lopencv_highgui2410 -lopencv_video2410 -lopencv_imgproc2410
-else:win64:CONFIG(debug, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410d -lopencv_highgui2410d -lopencv_video2410d -lopencv_imgproc2410d
+CONFIG(release, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410 -lopencv_highgui2410 -lopencv_video2410 -lopencv_imgproc2410
+CONFIG(debug, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410d -lopencv_highgui2410d -lopencv_video2410d -lopencv_imgproc2410d
 
 #-------------------------------------------------
 # Icon for Mac
