@@ -690,3 +690,10 @@ void DropMatrixMatcher::on_pushButton_clicked(){
     HelpWindow *hWindow = new HelpWindow(0);
     hWindow->setVisible(true);
 }
+
+void DropMatrixMatcher::on_pushButton_2_clicked()
+{
+    //*imagePath
+    HelpWindow *hWindow = new HelpWindow(0);
+    hWindow->setVisible(true);
+}
