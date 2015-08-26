@@ -203,10 +203,11 @@ void Window::setDocument(QString document){
     if(document=="currency"){
         comboBoxDocumentName->setDisabled(false);
         QSqlQueryModel *model = new QSqlQueryModel (comboBoxCountry);
-        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE type = 'currency'");
+        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE type = 'currency' ORDER BY country ASC");
         comboBoxCountry->setModel(model);
     }
     else{
+         comboBoxDocumentName->setCurrentIndex(0);
         comboBoxDocumentName->setDisabled(true);
     }
 }
@@ -215,13 +216,31 @@ void Window::setCountry(QString documentType){
     if(documentType =="id-card"){
         comboBoxCountry->clear();
         QSqlQueryModel *model = new QSqlQueryModel (comboBoxCountry);
-        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE TYPE = 'id-card'");
+        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE TYPE = 'id-card' ORDER BY country ASC");
         comboBoxCountry->setModel(model);
        }
     else if(documentType =="contract"){
         comboBoxCountry->clear();
         QSqlQueryModel *model = new QSqlQueryModel (comboBoxCountry);
-        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE TYPE = 'contract'");
+        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE TYPE = 'contract' ORDER BY country ASC");
+        comboBoxCountry->setModel(model);
+       }
+    else if(documentType =="driver-license"){
+        comboBoxCountry->clear();
+        QSqlQueryModel *model = new QSqlQueryModel (comboBoxCountry);
+        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE TYPE = 'driver-license' ORDER BY country ASC");
+        comboBoxCountry->setModel(model);
+       }
+    else if(documentType =="permanent resident"){
+        comboBoxCountry->clear();
+        QSqlQueryModel *model = new QSqlQueryModel (comboBoxCountry);
+        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE TYPE = 'permanent resident' ORDER BY country ASC");
+        comboBoxCountry->setModel(model);
+       }
+    else if(documentType =="citizen card"){
+        comboBoxCountry->clear();
+        QSqlQueryModel *model = new QSqlQueryModel (comboBoxCountry);
+        model->setQuery ("SELECT country FROM DOCUMENT_TYPE WHERE TYPE = 'citizen card' ORDER BY country ASC");
         comboBoxCountry->setModel(model);
        }
 }
@@ -281,6 +300,14 @@ void Window::toSend(){
 }
 
 void Window::toUpload(){
+    if(comboBoxDocumentType->currentText() =="currency" && comboBoxDocumentName->currentText() == ""){
+        qDebug( "No document name selected!" );
+        QMessageBox msgBox;
+        msgBox.setText("No document name selected!");
+        msgBox.exec();
+        return;
+    }
+    this->setVisible(false);
    // std::cout << localpath.toStdString() << std::endl;
     QFile* file = new QFile(localpath);
     //QFileInfo fileInfo(file.fileName());
