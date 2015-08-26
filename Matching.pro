@@ -32,9 +32,9 @@ FORMS    += \
 #-------------------------------------------------
 # MacOS - libs
 #-------------------------------------------------
-mac: INCLUDEPATH = /usr/local/include
+mac: INCLUDEPATH = /opt/local/include #/usr/local/include (Version 3.0)
 
-mac: LIBS += -L/usr/local/lib \
+mac: LIBS += -L/opt/local/lib \#/usr/local/lib (Version 3.0)
     -lopencv_core \
     -lopencv_highgui \
     -lopencv_video \
