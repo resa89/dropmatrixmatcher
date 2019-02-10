@@ -66,11 +66,11 @@ mac: LIBS += -framework CoreFoundation
 #-------------------------------------------------
 # Windows64 - libs
 #-------------------------------------------------
-INCLUDEPATH += C:/openCV/opencv/build/include
-DEPENDPATH += C:/openCV/opencv/build/include
+win64: INCLUDEPATH += C:/openCV/opencv/build/include
+win64: DEPENDPATH += C:/openCV/opencv/build/include
 
-CONFIG(release, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410 -lopencv_highgui2410 -lopencv_video2410 -lopencv_imgproc2410
-CONFIG(debug, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410d -lopencv_highgui2410d -lopencv_video2410d -lopencv_imgproc2410d
+win64: CONFIG(release, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410 -lopencv_highgui2410 -lopencv_video2410 -lopencv_imgproc2410
+win64: CONFIG(debug, debug|release): LIBS += -LC:/openCV/opencv/build/x64/vc12/lib/ -lopencv_core2410d -lopencv_highgui2410d -lopencv_video2410d -lopencv_imgproc2410d
 
 #-------------------------------------------------
 # Icon for Mac
