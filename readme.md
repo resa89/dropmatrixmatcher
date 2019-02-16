@@ -19,3 +19,4 @@ The automatic matching functionality is implemented in the _matching.cpp_ file. 
 To setup the database connection the function `Window::setupModel()` in the file _dropmatrixmatcher.cpp_ has to be adapted.
 
 
+Read more about the project on the [project website](http://www.korensic.com/drop-matrix-matcher).
